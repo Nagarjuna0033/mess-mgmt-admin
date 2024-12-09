@@ -7,31 +7,33 @@ import { colorsArray } from '../../utils/color';
 
 
 const data = [
-    { messName: 'Mess 1', solved_complaints: 25, pending_complaints: 10 },
-    { messName: 'Mess 2', solved_complaints: 15, pending_complaints: 5 },
-    { messName: 'Mess 3', solved_complaints: 30, pending_complaints: 15 },
-    { messName: 'Mess 4', solved_complaints: 10, pending_complaints: 5 },
-    { messName: 'Mess 5', solved_complaints: 20, pending_complaints: 10 },
-    { messName: 'Mess 6', solved_complaints: 35, pending_complaints: 10 },
-    { messName: 'Mess 7', solved_complaints: 40, pending_complaints: 15 },
-    { messName: 'Mess 8', solved_complaints: 15, pending_complaints: 10 },
-    { messName: 'Mess 9', solved_complaints: 25, pending_complaints: 10 },
-    { messName: 'Mess 10', solved_complaints: 5, pending_complaints: 7 },
+    { category: 'Timeliness', solved_complaints: 25, pending_complaints: 5 },
+    { category: 'Neatness/cleanliness', solved_complaints: 10, pending_complaints: 3 },
+    { category: 'Food quality', solved_complaints: 15, pending_complaints: 5 },
+    { category: 'Taste of curries', solved_complaints: 5, pending_complaints: 2 },
+    { category: 'Snacks And Breakfast', solved_complaints: 20, pending_complaints: 10 },
+    { category: 'Quantity of food', solved_complaints: 10, pending_complaints: 2 },
+    { category: 'Employee courtesy', solved_complaints: 35, pending_complaints: 5 },
+    { category: 'Uniform wearing ', solved_complaints: 15, pending_complaints: 8 },
+    { category: 'Cooking as per menu', solved_complaints: 10, pending_complaints: 5 },
+    { category: 'Cleanliness of wash area', solved_complaints: 7, pending_complaints: 3 },
+    { category: 'Others', solved_complaints: 7, pending_complaints: 3 }
 ];
+
 
 // Data for complaints and issues
 const complaints_data = data.map((item) => ({
-    label: item.messName,
+    label: item.category,
     value: item.solved_complaints + item.pending_complaints
 }));
 
 const complaints_resolved = data.map((item) => ({
-    label: item.messName,
+    label: item.category,
     value: item.solved_complaints
 }));
 
 const complaints_pending = data.map((item) => ({
-    label: item.messName,
+    label: item.category,
     value: item.pending_complaints
 }));
 
@@ -160,7 +162,7 @@ function LinearProgressWithLabel({ label, value, total, color }) {
 }
 
 
-export default function ChartMessComplaints() {
+export default function TotalComplaintsChart() {
     return (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '16px', width: '100%' }}>
             <Stack direction="column" sx={{ gap: 2, width: '50%', alignItems: 'center' }}>
@@ -176,17 +178,18 @@ export default function ChartMessComplaints() {
                     const color = colorsArray[index]; // Get a unique color for each Mess
                     return (
                         <Stack key={index} direction="row" sx={{ alignItems: 'center', gap: 4, pb: 2, width: '100%' }}>
-                            <Typography variant="h6" sx={{ marginLeft: 'auto', color: color , width:"20%" }}>
-                                {complaint.label}
-                            </Typography>
+                            
 
                             <LinearProgressWithLabel
                                 label="Complaints"
                                 value={complaint.value}
                                 total={total_complaints}
-                                color="sky_blue"
-                                sx={{ width: '75%' }}
+                                color="orange"
+                                sx={{ width: '50%' }}
                             />
+                            <Typography variant="h6" sx={{ marginLeft: 'auto', color: color, width:'50%' }}>
+                                {complaint.label}
+                            </Typography>
 
                         </Stack>
                     );

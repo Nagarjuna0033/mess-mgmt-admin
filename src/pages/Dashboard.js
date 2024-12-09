@@ -6,15 +6,18 @@ import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import AppNavbar from "../components/AppNavbar";
 import Header from "../components/Header";
-import MainGrid from "../components/MainGrid";
 import SideMenu from "../components/SideMenu";
 import AppTheme from "../shared-theme/AppTheme";
+import { Outlet } from "react-router-dom";
+
+
 import {
   chartsCustomizations,
   dataGridCustomizations,
   datePickersCustomizations,
   treeViewCustomizations,
 } from "../theme/customizations";
+
 
 const xThemeComponents = {
   ...chartsCustomizations,
@@ -24,13 +27,17 @@ const xThemeComponents = {
 };
 
 export default function Dashboard(props) {
+  
+
   return (
     <AppTheme {...props} themeComponents={xThemeComponents}>
       <CssBaseline enableColorScheme />
       <Box sx={{ display: "flex" }}>
-        <SideMenu />
+        
+        <SideMenu/>
+
         <AppNavbar />
-        {/* Main content */}
+
         <Box
           component="main"
           sx={(theme) => ({
@@ -51,7 +58,7 @@ export default function Dashboard(props) {
             }}
           >
             <Header />
-            <MainGrid />
+            <Outlet />
           </Stack>
         </Box>
       </Box>

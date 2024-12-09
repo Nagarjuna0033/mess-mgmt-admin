@@ -30,7 +30,7 @@ const secondaryListItems = [
 ];
 
 const tertiaryListItems = [
-  { text: 'Change Mess Menu', icon: <RestaurantMenuRoundedIcon />, path: '/menu-change' },
+  { text: 'Mess Menu', icon: <RestaurantMenuRoundedIcon />, path: '/menu' },
   { text: 'Update Roles', icon: <EditRoundedIcon />, path: '/updateRole' },
 ];
 

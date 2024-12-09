@@ -13,6 +13,9 @@ import BarChartRoundedIcon from '@mui/icons-material/BarChartRounded';
 import PieChartRoundedIcon from '@mui/icons-material/PieChartRounded';
 import InsertChartRoundedIcon from '@mui/icons-material/InsertChartRounded';
 import FeedbackRoundedIcon from '@mui/icons-material/FeedbackRounded';
+import GroupRoundedIcon from '@mui/icons-material/GroupRounded';
+import EditRoundedIcon from '@mui/icons-material/EditRounded';
+import RestaurantMenuRoundedIcon from '@mui/icons-material/RestaurantMenuRounded';
 
 const mainListItems = [
   { text: 'Home', icon: <HomeRoundedIcon />, path: '/' },
@@ -21,10 +24,14 @@ const mainListItems = [
 ];
 
 const secondaryListItems = [
-  { text: 'Over All Analytics', icon: <BarChartRoundedIcon />, path: '/analytics/overall' },
   { text: 'Mess Wise Analytics', icon: <PieChartRoundedIcon />, path: '/analytics/mess-wise' },
-  { text: 'Complaints Analytics', icon: <InsertChartRoundedIcon />, path: '/analytics/complaints' },
+  { text: 'Complaints Analytics', icon: <BarChartRoundedIcon />, path: '/analytics/complaints' },
   { text: 'Feedback Analytics', icon: <FeedbackRoundedIcon />, path: '/analytics/feedback' },
+];
+
+const tertiaryListItems = [
+  { text: 'Change Mess Menu', icon: <RestaurantMenuRoundedIcon />, path: '/menu-change' },
+  { text: 'Update Roles', icon: <EditRoundedIcon />, path: '/updateRole' },
 ];
 
 export default function MenuContent() {
@@ -58,6 +65,20 @@ export default function MenuContent() {
       {/* Secondary List */}
       <List dense>
         {secondaryListItems.map((item) => (
+          <ListItem key={item.path} disablePadding sx={{ display: 'block' }}>
+            <ListItemButton
+              selected={selectedPath === item.path} // Set selected based on selectedPath state
+              onClick={() => handleMenuItemClick(item.path)} // Update state and navigate on click
+            >
+              <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItemText primary={item.text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+
+      <List dense>
+        {tertiaryListItems.map((item) => (
           <ListItem key={item.path} disablePadding sx={{ display: 'block' }}>
             <ListItemButton
               selected={selectedPath === item.path} // Set selected based on selectedPath state

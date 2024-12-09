@@ -4,6 +4,7 @@ import { useDrawingArea } from '@mui/x-charts/hooks';
 import { styled } from '@mui/material/styles';
 import { Stack, Typography, LinearProgress, linearProgressClasses } from '@mui/material';
 import { colorsArray } from '../../utils/color';
+import TotalComplaintsBarChart from "./TotalComplaintsBarChart"
 
 
 const data = [
@@ -164,6 +165,7 @@ function LinearProgressWithLabel({ label, value, total, color }) {
 
 export default function TotalComplaintsChart() {
     return (
+        <Stack direction="column" sx={{ gap: 2, width:"100%" }}>
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '16px', width: '100%' }}>
             <Stack direction="column" sx={{ gap: 2, width: '50%', alignItems: 'center' }}>
                 <Pie data={complaints_data} secondaryText="Complaints" total={total_complaints}/>
@@ -192,10 +194,14 @@ export default function TotalComplaintsChart() {
                             </Typography>
 
                         </Stack>
+
                     );
                 })}
             </div>
         </div>
+        <TotalComplaintsBarChart/>
+        </Stack>
+
     );
 }
 

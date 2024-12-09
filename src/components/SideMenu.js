@@ -35,18 +35,18 @@ export default function SideMenu() {
         },
       }}
     >
-      <Box
-        sx={{
-          display: 'flex',
-          mt: 'calc(var(--template-frame-height, 0px) + 4px)',
-          p: 1.5,
-        }}
-      >
-        <SelectContent />
-      </Box>
+      <Stack direction="column" sx={{ justifyContent: 'center', alignItems: 'center', mb: 1, mt: 2 }}>
+        <Typography variant="h6" sx={{ fontWeight: 600 }}>
+          Mess Management
+        </Typography>
+        <Typography variant="h6" sx={{ fontWeight: 600 }}>
+         Admin
+        </Typography>
+      </Stack>
       <Divider />
-      <MenuContent />
-      <CardAlert />
+      
+      <MenuContent/>
+      
       <Stack
         direction="row"
         sx={{

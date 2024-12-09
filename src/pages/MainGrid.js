@@ -11,6 +11,7 @@ import HighlightedCard from '../components/HighlightedCard';
 import PageViewsBarChart from '../components/PageViewsBarChart';
 import SessionsChart from '../components/SessionsChart';
 import StatCard from '../components/StatCard';
+import TotalComplaintsBarChart from '../components/graphs/TotalComplaintsBarChart';
 
 const data = [
   {
@@ -70,7 +71,8 @@ export default function Home() {
           <SessionsChart />
         </Grid>
         <Grid size={{ xs: 12, md: 6 }}>
-          <PageViewsBarChart />
+          <TotalComplaintsBarChart/>
+          {/* <PageViewsBarChart /> */}
         </Grid>
       </Grid>
       <Typography component="h2" variant="h6" sx={{ mb: 2 }}>

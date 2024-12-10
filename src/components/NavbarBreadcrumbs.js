@@ -28,10 +28,14 @@ export default function NavbarBreadcrumbs() {
         return ["Dashboard", "Menu"];
       case "/editIncharge":
         return ["Dashboard", "Edit InCharge"];
-        case "/menu-change":
-          return ["Dashboard", "Edit Menu"];
-        case "/editIncharge":
-          return ["Dashboard", "Edit InCharge"];
+      case "/menu-change":
+        return ["Dashboard", "Edit Menu"];
+      case "/editIncharge":
+        return ["Dashboard", "Edit InCharge"];
+      case "/profile":
+        return ["Dashboard", "Profile"];
+      case "/edit-profile":
+        return ["Dashboard", "Edit Profile"];
       default:
         return ["Dashboard", "Unknown"];
     }

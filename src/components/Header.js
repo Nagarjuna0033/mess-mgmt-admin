@@ -2,13 +2,16 @@ import * as React from "react";
 import Stack from "@mui/material/Stack";
 import rguktLogo from "../images/rguktLogo.png"
 import NavbarBreadcrumbs from "./NavbarBreadcrumbs";
+import { useNavigate } from "react-router-dom";
 
 import ColorModeIconDropdown from "../shared-theme/ColorModeIconDropdown";
 
 import { Box, Typography } from "@mui/material";
 
 export default function Header() {
+  const navigate=useNavigate()
   return (
+    
     <Stack
       direction="row"
       sx={{
@@ -31,7 +34,7 @@ export default function Header() {
         <Box component="img"
           src={rguktLogo}
           alt="Mess Logo"
-          sx={{ width: 40, height: 40, marginRight: 3 }}
+          sx={{ width: 40, height: 40, marginRight: 2 }}
         />
         <Typography
           sx={{

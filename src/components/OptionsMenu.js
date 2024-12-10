@@ -10,12 +10,14 @@ import ListItemIcon, { listItemIconClasses } from '@mui/material/ListItemIcon';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 import MenuButton from './MenuButton';
+import { useNavigate } from 'react-router-dom';
 
 const MenuItem = styled(MuiMenuItem)({
   margin: '2px 0',
 });
 
 export default function OptionsMenu() {
+  const navigate = useNavigate()
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -53,8 +55,14 @@ export default function OptionsMenu() {
           },
         }}
       >
-        <MenuItem onClick={handleClose}>Profile</MenuItem>
-        <MenuItem onClick={handleClose}>Edit Profile</MenuItem>
+        <MenuItem onClick={() => {
+          handleClose()
+          navigate("/profile")
+        }}>Profile</MenuItem>
+        <MenuItem onClick={() => {
+          handleClose()
+          navigate("/edit-profile")
+        }}>Edit Profile</MenuItem>
         <Divider />
         <MenuItem
           onClick={handleClose}

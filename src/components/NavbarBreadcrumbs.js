@@ -24,12 +24,20 @@ export default function NavbarBreadcrumbs() {
         return ["Dashboard", "Analytics", "Complaints Analytics"];
       case "/analytics/feedback":
         return ["Dashboard", "Analytics", "Feedback Analytics"];
+      case "/menu":
+        return ["Dashboard", "Menu"];
+      case "/editIncharge":
+        return ["Dashboard", "Edit InCharge"];
+        case "/menu-change":
+          return ["Dashboard", "Edit Menu"];
+        case "/editIncharge":
+          return ["Dashboard", "Edit InCharge"];
       default:
-        return ["Dashboard", "Unknown"]; 
+        return ["Dashboard", "Unknown"];
     }
   };
 
-  const breadcrumbs = getBreadcrumbs(location.pathname); 
+  const breadcrumbs = getBreadcrumbs(location.pathname);
 
   return (
     <StyledBreadcrumbs

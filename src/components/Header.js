@@ -1,12 +1,11 @@
 import * as React from "react";
 import Stack from "@mui/material/Stack";
-import NotificationsRoundedIcon from "@mui/icons-material/NotificationsRounded";
-import CustomDatePicker from "./CustomDatePicker";
+import rguktLogo from "../images/rguktLogo.png"
 import NavbarBreadcrumbs from "./NavbarBreadcrumbs";
-import MenuButton from "./MenuButton";
+
 import ColorModeIconDropdown from "../shared-theme/ColorModeIconDropdown";
 
-import Search from "./Search";
+import { Box, Typography } from "@mui/material";
 
 export default function Header() {
   return (
@@ -23,12 +22,29 @@ export default function Header() {
       spacing={2}
     >
       <NavbarBreadcrumbs />
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        sx={{ padding: 2 }}
+      >
+        <Box component="img"
+          src={rguktLogo}
+          alt="Mess Logo"
+          sx={{ width: 40, height: 40, marginRight: 3 }}
+        />
+        <Typography
+          sx={{
+           
+            fontSize: '1.5rem', 
+            fontWeight: 'bold'
+          }}
+        >
+          RGUKT Mess Management System
+        </Typography>
+      </Box>
+      
       <Stack direction="row" sx={{ gap: 1 }}>
-        {/* <Search /> */}
-        {/* <CustomDatePicker /> */}
-        <MenuButton showBadge aria-label="Open notifications">
-          <NotificationsRoundedIcon />
-        </MenuButton>
         <ColorModeIconDropdown />
       </Stack>
     </Stack>

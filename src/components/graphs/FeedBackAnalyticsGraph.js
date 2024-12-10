@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import FeedbackBarChart from '../FeedBackBarChart';
+import SendFeedbackNotification from "../../components/SendFeedBackNotification";
+import { Grid2 } from '@mui/material';
 
 export default function FeedBackAnalyticsGraph({ data }) {
     const [selectedMessIndex, setSelectedMessIndex] = useState(0);
@@ -116,27 +118,35 @@ export default function FeedBackAnalyticsGraph({ data }) {
                 }}
             />
 
-            <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                marginTop: '50px',
-                textAlign: 'center',
-            }}>
-                <div style={{ flex: 1, padding: '10px', border: '1px solid #ddd' }}>
-                    <h3>Excellent Messes</h3>
-                    {renderMessesCategory(excellentMesses, "Unfortunately, no good messes!")}
-                </div>
+            <Grid2 container spacing={3} sx={{ p: 3 }}>
 
-                <div style={{ flex: 1, padding: '10px', border: '1px solid #ddd' }}>
-                    <h3>Average Messes</h3>
-                    {renderMessesCategory(averageMesses, "No Average messes")}
-                </div>
+                <Grid2 item xs={12} md={8}>
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        textAlign: 'center',
+                    }}>
+                        <div style={{ flex: 1, padding: '10px', border: '1px solid #ddd' }}>
+                            <h3>Excellent Messes</h3>
+                            {renderMessesCategory(excellentMesses, "Unfortunately, no good messes!")}
+                        </div>
 
-                <div style={{ flex: 1, padding: '10px', border: '1px solid #ddd' }}>
-                    <h3>Worst Messes</h3>
-                    {renderMessesCategory(worstMesses, "It's good news, no worst messes!")}
-                </div>
-            </div>
+                        <div style={{ flex: 1, padding: '10px', border: '1px solid #ddd' }}>
+                            <h3>Average Messes</h3>
+                            {renderMessesCategory(averageMesses, "No Average messes")}
+                        </div>
+
+                        <div style={{ flex: 1, padding: '10px', border: '1px solid #ddd' }}>
+                            <h3>Worst Messes</h3>
+                            {renderMessesCategory(worstMesses, "It's good news, no worst messes!")}
+                        </div>
+                    </div>
+                </Grid2>
+
+                <Grid2 item xs={12} md={4}>
+                    <SendFeedbackNotification />
+                </Grid2>
+            </Grid2>
         </>
     );
 }

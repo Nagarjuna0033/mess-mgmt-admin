@@ -36,6 +36,8 @@ export default function NavbarBreadcrumbs() {
         return ["Dashboard", "Profile"];
       case "/edit-profile":
         return ["Dashboard", "Edit Profile"];
+      case "/change-messes":
+        return ["Dashboard", "Change Messes"];
       default:
         return ["Dashboard", "Unknown"];
     }

@@ -9,7 +9,6 @@ import ColorModeIconDropdown from "../shared-theme/ColorModeIconDropdown";
 import { Box, Typography } from "@mui/material";
 
 export default function Header() {
-  const navigate=useNavigate()
   return (
     
     <Stack

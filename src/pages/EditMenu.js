@@ -1,5 +1,85 @@
-import React, { useState } from 'react';
-import { menu_items } from './ChangeMenu';
+import React, { useState } from "react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+  Button,
+  Paper,
+  Typography,
+} from "@mui/material";
+import { menu_items } from "./ChangeMenu";
+
+function EditMenuTable({ menus, onMenuChange, onSubmit }) {
+  return (
+    <TableContainer component={Paper} style={{ margin: "20px 0" }}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>Day</TableCell>
+            <TableCell>Breakfast</TableCell>
+            <TableCell>Lunch</TableCell>
+            <TableCell>Snacks</TableCell>
+            <TableCell>Dinner</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {menus.map((menu, dayIndex) => (
+            <TableRow key={dayIndex}>
+              <TableCell>{menu.day}</TableCell>
+              <TableCell>
+                <TextField
+                  fullWidth
+                  value={menu.breakfast}
+                  onChange={(e) => onMenuChange(e, dayIndex, "breakfast")}
+                  variant="outlined"
+                  size="small"
+                />
+              </TableCell>
+              <TableCell>
+                <TextField
+                  fullWidth
+                  value={menu.lunch}
+                  onChange={(e) => onMenuChange(e, dayIndex, "lunch")}
+                  variant="outlined"
+                  size="small"
+                />
+              </TableCell>
+              <TableCell>
+                <TextField
+                  fullWidth
+                  value={menu.snacks}
+                  onChange={(e) => onMenuChange(e, dayIndex, "snacks")}
+                  variant="outlined"
+                  size="small"
+                />
+              </TableCell>
+              <TableCell>
+                <TextField
+                  fullWidth
+                  value={menu.dinner}
+                  onChange={(e) => onMenuChange(e, dayIndex, "dinner")}
+                  variant="outlined"
+                  size="small"
+                />
+              </TableCell>
+            </TableRow>
+          ))}
+          <TableRow>
+            <TableCell colSpan={5} align="center">
+              <Button variant="contained" color="secondary" onClick={onSubmit}>
+                Submit Changes
+              </Button>
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
+}
 
 export default function EditMenu() {
   const [menus, setMenus] = useState(menu_items);
@@ -12,86 +92,19 @@ export default function EditMenu() {
 
   const handleSubmit = () => {
     console.log("Updated Menu Items:", menus);
-    // Here, you can send the updated menus to your backend or handle them accordingly.
+    alert("Menu updated successfully!");
   };
 
   return (
-    <div style={{ padding: '20px',width:"100%" }}>
-      <h2>Edit Menu</h2>
-      <table
-        style={{
-          width: '100%',
-          borderCollapse: 'collapse',
-          marginTop: '20px',
-          textAlign: 'left',
-        }}
-      >
-        <thead>
-          <tr>
-            <th style={{ padding: '10px', border: '1px solid #ddd' }}>Day</th>
-            <th style={{ padding: '10px', border: '1px solid #ddd' }}>Breakfast</th>
-            <th style={{ padding: '10px', border: '1px solid #ddd' }}>Lunch</th>
-            <th style={{ padding: '10px', border: '1px solid #ddd' }}>Snacks</th>
-            <th style={{ padding: '10px', border: '1px solid #ddd' }}>Dinner</th>
-          </tr>
-        </thead>
-        <tbody>
-          {menus.map((menu, dayIndex) => (
-            <tr key={dayIndex}>
-              <td style={{ padding: '10px', border: '1px solid #ddd' }}>
-                {menu.day}
-              </td>
-              <td style={{ padding: '10px', border: '1px solid #ddd' }}>
-                <input
-                  type="text"
-                  value={menu.breakfast}
-                  onChange={(e) => handleInputChange(e, dayIndex, 'breakfast')}
-                  style={{ width: '100%', padding: '5px' }}
-                />
-              </td>
-              <td style={{ padding: '10px', border: '1px solid #ddd' }}>
-                <input
-                  type="text"
-                  value={menu.lunch}
-                  onChange={(e) => handleInputChange(e, dayIndex, 'lunch')}
-                  style={{ width: '100%', padding: '5px' }}
-                />
-              </td>
-              <td style={{ padding: '10px', border: '1px solid #ddd' }}>
-                <input
-                  type="text"
-                  value={menu.snacks}
-                  onChange={(e) => handleInputChange(e, dayIndex, 'snacks')}
-                  style={{ width: '100%', padding: '5px' }}
-                />
-              </td>
-              <td style={{ padding: '10px', border: '1px solid #ddd' }}>
-                <input
-                  type="text"
-                  value={menu.dinner}
-                  onChange={(e) => handleInputChange(e, dayIndex, 'dinner')}
-                  style={{ width: '100%', padding: '5px' }}
-                />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <button
-        onClick={handleSubmit}
-        style={{
-          padding: '10px 20px',
-          fontSize: '16px',
-          backgroundColor: '#4CAF50',
-          color: 'white',
-          border: 'none',
-          borderRadius: '5px',
-          cursor: 'pointer',
-          marginTop: '20px',
-        }}
-      >
-        Submit Changes
-      </button>
+    <div style={{ padding: "20px", width: "100%" }}>
+      <Typography variant="h4" gutterBottom>
+        Edit Menu
+      </Typography>
+      <EditMenuTable
+        menus={menus}
+        onMenuChange={handleInputChange}
+        onSubmit={handleSubmit}
+      />
     </div>
   );
 }

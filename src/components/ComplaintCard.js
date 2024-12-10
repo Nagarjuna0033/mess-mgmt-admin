@@ -1,16 +1,11 @@
-import * as React from "react";
-import { styled } from "@mui/material/styles";
+import React from "react";
+import { Box, Button, Menu, MenuItem, Typography } from "@mui/material";
 import ArrowForwardIosSharpIcon from "@mui/icons-material/ArrowForwardIosSharp";
 import MuiAccordion from "@mui/material/Accordion";
-import MuiAccordionSummary, {
-  accordionSummaryClasses,
-} from "@mui/material/AccordionSummary";
+import MuiAccordionSummary from "@mui/material/AccordionSummary";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import Button from "@mui/material/Button";
-import { Box } from "@mui/material";
+import { styled } from "@mui/material/styles";
+
 const Accordion = styled((props) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
 ))(({ theme }) => ({
@@ -31,16 +26,6 @@ const AccordionSummary = styled((props) => (
 ))(({ theme }) => ({
   backgroundColor: "rgba(0, 0, 0, .03)",
   flexDirection: "row-reverse",
-  [`& .${accordionSummaryClasses.expandIconWrapper}.${accordionSummaryClasses.expanded}`]:
-    {
-      transform: "rotate(90deg)",
-    },
-  [`& .${accordionSummaryClasses.content}`]: {
-    marginLeft: theme.spacing(1),
-  },
-  ...theme.applyStyles("dark", {
-    backgroundColor: "rgba(255, 255, 255, .05)",
-  }),
 }));
 
 const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
@@ -50,15 +35,17 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 
 export default function ComplaintCard({ complaints, index }) {
   const [expanded, setExpanded] = React.useState(index === 0 && 0);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
 
   const handleChange = (panel) => (event, newExpanded) => {
     setExpanded(newExpanded ? panel : false);
   };
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -80,40 +67,74 @@ export default function ComplaintCard({ complaints, index }) {
           >
             <Typography>{complaints.shortMsg}</Typography>
             <Button id="basic-button" disabled>
-              {complaints.status}
+              {complaints.status}{symb[complaints.status]}
             </Button>
           </Box>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>{complaints.desc}</Typography>
-          {complaints.status !== "Done" && (
-            <Box sx={{ mt: 2 }}>
-              <Button
-                id="status-button"
-                aria-controls={open ? "status-menu" : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? "true" : undefined}
-                onClick={handleClick}
-              >
-                Status
-              </Button>
-              <Menu
-                id="status-menu"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                MenuListProps={{
-                  "aria-labelledby": "status-button",
-                }}
-              >
-                <MenuItem onClick={handleClose}>Done</MenuItem>
-                <MenuItem onClick={handleClose}>In Progress</MenuItem>
-                <MenuItem onClick={handleClose}>Pending</MenuItem>
-              </Menu>
+          {/* Flexbox Layout */}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "flex-start",
+              gap: 2, // Space between items
+            }}
+          >
+            {/* Fixed Width Image */}
+            <Box
+              sx={{
+                flexShrink: 0, // Prevent the image box from shrinking
+                width: "500px", // Fixed width
+              }}
+            >
+              <img
+                src={complaints.img}
+                alt="Complaint"
+                style={{ width: "100%", borderRadius: "8px" }}
+              />
             </Box>
-          )}
+
+            {/* Dynamic Content */}
+            <Box sx={{ flex: 1 }}>
+              {complaints.status !== "Done" && (
+                <Box sx={{ mb: 2 }}>
+                  <Button
+                    id="status-button"
+                    aria-controls={open ? "status-menu" : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? "true" : undefined}
+                    onClick={handleClick}
+                  >
+                    Status
+                  </Button>
+                  <Menu
+                    id="status-menu"
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    MenuListProps={{
+                      "aria-labelledby": "status-button",
+                    }}
+                  >
+                    <MenuItem onClick={handleClose}>Done</MenuItem>
+                    <MenuItem onClick={handleClose}>In Progress</MenuItem>
+                    <MenuItem onClick={handleClose}>Pending</MenuItem>
+                  </Menu>
+                </Box>
+              )}
+              <h3>Complaint Came from Mess 2</h3>
+              <Typography>{complaints.desc}</Typography>
+            </Box>
+          </Box>
         </AccordionDetails>
       </Accordion>
     </Box>
   );
+}
+
+const symb = {
+  "Done": "✅",
+  "In Review":"🕒",
+  "Pending":"❌"
 }

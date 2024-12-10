@@ -21,11 +21,11 @@ function TopIssuesCard({ issues }) {
     return (
         <Card variant="outlined" sx={{ height: "100%", flexGrow: 1, boxShadow: 3 }}>
             <CardContent >
-                <Box sx={{ width: "100%", display: "flex", justifyContent: "space-between" ,alignItems: "center",}}>
+                <Box sx={{ width: "100%", display: "flex", justifyContent: "space-between" ,alignItems: "center",}} >
                 <Typography component="h1" variant="subtitle1" gutterBottom>
                     Top Issues
                 </Typography>
-                    <Button sx={{ background: "cyan" }} onClick={()=>navigate("/current-issues")}>See All Issues</Button>
+                    <Button variant="contained" color="secondary" onClick={()=>navigate("/current-issues")}>See All Issues</Button>
                 </Box>
                 
                 <Stack direction="column" spacing={2} sx={{ paddingTop: "15px" }}>

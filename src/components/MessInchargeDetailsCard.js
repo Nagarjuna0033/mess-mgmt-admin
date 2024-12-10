@@ -20,7 +20,7 @@ function MessInchargeDetailsCard({ messDetails }) {
                 <Typography component="h1" variant="subtitle1" gutterBottom>
                     Mess Incharge Details
                 </Typography>
-                <Button sx={{border:"1px", background:"cyan" , marginTop:"15px"}} onClick={()=>navigate("/editIncharge")}>
+                <Button variant="contained" color="secondary" onClick={()=>navigate("/editIncharge")}>
                     Edit
                 </Button>
                 </Box>

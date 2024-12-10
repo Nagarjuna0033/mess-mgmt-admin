@@ -32,6 +32,7 @@ const secondaryListItems = [
 const tertiaryListItems = [
   { text: 'Mess Menu', icon: <RestaurantMenuRoundedIcon />, path: '/menu' },
   { text: 'Edit Mess Incharges', icon: <EditRoundedIcon />, path: '/editIncharge' },
+  { text: 'Edit Mess Numbers', icon: <RestaurantMenuRoundedIcon />, path: '/change-messes' }
 ];
 
 export default function MenuContent() {

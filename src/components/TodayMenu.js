@@ -12,7 +12,7 @@ function MenuCard({ menu }) {
                     <Typography component="h2" variant="subtitle1" gutterBottom>
                         Today's Menu
                     </Typography>
-                    <Button variant="contained" color="secondary" onClick={()=>navigate("/menu")}>See All Issues</Button>
+                    <Button variant="contained" color="secondary" onClick={()=>navigate("/menu")}>See Weekly Menu</Button>
                 </Box>
                 
                 <Stack direction="column" spacing={2}>

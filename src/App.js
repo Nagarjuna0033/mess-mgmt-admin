@@ -11,6 +11,8 @@ import Home  from "./pages/MainGrid"
 import Menu from "./pages/ChangeMenu";
 import EditMenu from "./pages/EditMenu";
 import MessInchargePage from "./pages/EditMessIncharges"
+import EditProfile from "./pages/EditProfile";
+import ChangeMesses from "./pages/ChangeMesses";
 
 function App() {
   return (
@@ -26,10 +28,14 @@ function App() {
           <Route path="/analytics/complaints" element={<ComplaintAnalytics />} />
           <Route path="/analytics/mess-wise" element={<MessWiseAnalytics />} />
           <Route path="/analytics/feedback" element={<FeedBackAnalytics />} />
-          <Route path="/profile" element={<Profile />} />
+          
           <Route path="/menu" element={<Menu />} />
           <Route path="/menu-change" element={<EditMenu />} />
           <Route path="/editIncharge" element={<MessInchargePage />} />
+          <Route path="/change-messes" element={<ChangeMesses/>} />
+          
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/edit-profile" element={<EditProfile/>} />
           
         </Route>
 

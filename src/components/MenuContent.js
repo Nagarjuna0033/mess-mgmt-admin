@@ -30,30 +30,29 @@ const secondaryListItems = [
 ];
 
 const tertiaryListItems = [
-  { text: 'Change Mess Menu', icon: <RestaurantMenuRoundedIcon />, path: '/menu-change' },
-  { text: 'Update Roles', icon: <EditRoundedIcon />, path: '/updateRole' },
+  { text: 'Mess Menu', icon: <RestaurantMenuRoundedIcon />, path: '/menu' },
+  { text: 'Edit Mess Incharges', icon: <EditRoundedIcon />, path: '/editIncharge' },
 ];
 
 export default function MenuContent() {
-  // State to manage the selected path
+  
   const [selectedPath, setSelectedPath] = React.useState('/');
-  const navigate = useNavigate(); // Hook to navigate programmatically
-
-  // Function to handle menu item click, update selected path, and navigate
+  const navigate = useNavigate(); 
+  
   const handleMenuItemClick = (path) => {
-    setSelectedPath(path); // Update the selected path when a menu item is clicked
-    navigate(path); // Navigate to the selected path
+    setSelectedPath(path); 
+    navigate(path); 
   };
 
   return (
     <Stack sx={{ flexGrow: 1, p: 1 }}>
-      {/* Main List */}
+      
       <List dense>
         {mainListItems.map((item) => (
           <ListItem key={item.path} disablePadding sx={{ display: 'block' }}>
             <ListItemButton
-              selected={selectedPath === item.path} // Set selected based on selectedPath state
-              onClick={() => handleMenuItemClick(item.path)} // Update state and navigate on click
+              selected={selectedPath === item.path} 
+              onClick={() => handleMenuItemClick(item.path)} 
             >
               <ListItemIcon>{item.icon}</ListItemIcon>
               <ListItemText primary={item.text} />
@@ -62,13 +61,13 @@ export default function MenuContent() {
         ))}
       </List>
 
-      {/* Secondary List */}
+      
       <List dense>
         {secondaryListItems.map((item) => (
           <ListItem key={item.path} disablePadding sx={{ display: 'block' }}>
             <ListItemButton
-              selected={selectedPath === item.path} // Set selected based on selectedPath state
-              onClick={() => handleMenuItemClick(item.path)} // Update state and navigate on click
+              selected={selectedPath === item.path} 
+              onClick={() => handleMenuItemClick(item.path)} 
             >
               <ListItemIcon>{item.icon}</ListItemIcon>
               <ListItemText primary={item.text} />
@@ -81,8 +80,8 @@ export default function MenuContent() {
         {tertiaryListItems.map((item) => (
           <ListItem key={item.path} disablePadding sx={{ display: 'block' }}>
             <ListItemButton
-              selected={selectedPath === item.path} // Set selected based on selectedPath state
-              onClick={() => handleMenuItemClick(item.path)} // Update state and navigate on click
+              selected={selectedPath === item.path} 
+              onClick={() => handleMenuItemClick(item.path)} 
             >
               <ListItemIcon>{item.icon}</ListItemIcon>
               <ListItemText primary={item.text} />

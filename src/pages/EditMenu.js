@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { menu_items } from './ChangeMenu';
+import { Button } from '@mui/material';
 
 export default function EditMenu() {
   const [menus, setMenus] = useState(menu_items);
@@ -16,7 +17,7 @@ export default function EditMenu() {
   };
 
   return (
-    <div style={{ padding: '20px',width:"100%" }}>
+    <div style={{ padding: '20px', width: "100%" }}>
       <h2>Edit Menu</h2>
       <table
         style={{
@@ -77,21 +78,10 @@ export default function EditMenu() {
           ))}
         </tbody>
       </table>
-      <button
-        onClick={handleSubmit}
-        style={{
-          padding: '10px 20px',
-          fontSize: '16px',
-          backgroundColor: '#4CAF50',
-          color: 'white',
-          border: 'none',
-          borderRadius: '5px',
-          cursor: 'pointer',
-          marginTop: '20px',
-        }}
-      >
+      <Button variant="contained"
+        color="secondary" onClick={handleSubmit}>
         Submit Changes
-      </button>
+      </Button>
     </div>
   );
 }

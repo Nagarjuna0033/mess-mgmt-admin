@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -9,8 +9,16 @@ import Stack from "@mui/material/Stack";
 import PhoneIcon from "@mui/icons-material/Phone";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import {getAllInchargeDetails} from "../api/getMessInchargeDetails"
 
-function MessInchargeDetailsCard({ messDetails }) {
+function MessInchargeDetailsCard() {
+    const [messDetails,setMess]=useState([])
+    const getData=async()=>{
+        setMess(await getAllInchargeDetails())
+    }
+    useEffect(()=>{
+        getData()
+    },[])
     const theme = useTheme();
     const navigate=useNavigate();
     return (
@@ -58,7 +66,7 @@ function MessInchargeDetailsCard({ messDetails }) {
                                 {mess.messName}
                             </Typography>
                             <Typography variant="body2" sx={{ marginBottom: "5px" }}>
-                                Incharge: {mess.inchargeName}
+                                Incharge: {mess.InchargeName}
                             </Typography>
                             <Typography
                                 variant="body2"

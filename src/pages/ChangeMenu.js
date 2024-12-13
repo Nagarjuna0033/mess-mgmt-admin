@@ -1,19 +1,75 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
+import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, Box } from "@mui/material";
+import { getAllMenuData } from "../api/getAllMenuData";
+import { FormatMessData } from "../utils/formatMessData";
+import { getMessMenuUpdatedNumber } from "../api/getMessMenuUpdatedNumber";
 
-export const menu_items = [
-  { day: "Monday", breakfast: "Pancakes, Scrambled eggs", lunch: "Grilled chicken, Rice", snacks: "Chips, Fruit", dinner: "Spaghetti, Salad" },
-  { day: "Tuesday", breakfast: "Omelette, Toast", lunch: "Vegetable curry, Rice", snacks: "Cookies, Fruit", dinner: "Pizza, Caesar salad" },
-  { day: "Wednesday", breakfast: "Cereal, Milk", lunch: "Chicken curry, Rice", snacks: "Crackers, Cheese", dinner: "Grilled fish, Broccoli" },
-  { day: "Thursday", breakfast: "French toast, Bacon", lunch: "Beef stir-fry, Noodles", snacks: "Nuts, Granola bar", dinner: "Burger, Fries" },
-  { day: "Friday", breakfast: "Porridge, Toast", lunch: "Grilled salmon, Quinoa", snacks: "Pretzels, Yogurt", dinner: "Sushi, Edamame" },
-  { day: "Saturday", breakfast: "Waffles, Syrup", lunch: "Vegetable stir-fry, Rice", snacks: "Trail mix, Cheese", dinner: "Steak, Mashed potatoes" },
-  { day: "Sunday", breakfast: "Bagels, Fruit salad", lunch: "Pasta, Garlic bread", snacks: "Popcorn, Muffins", dinner: "Roast chicken, Vegetables" },
-];
+const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
 export default function Menu() {
+  const [menu_items_from_web, setMenu] = useState({});
+  const [isLoading, setIsLoading] = useState(true);  // Added loading state
+
+  const fetchMenuData = async () => {
+    try {
+      const res = await getAllMenuData();
+      if (res.status === true) {
+        let dd = FormatMessData(res.data);
+        console.log("Formatted Menu Data:", dd);
+        localStorage.setItem("menu", JSON.stringify(dd)); 
+        setMenu(dd); 
+        console.log("API Called")
+      } else {
+        console.log("Error message from API:", res.msg);
+      }
+    } catch (error) {
+      console.error("Error fetching menu data:", error);
+    } finally {
+      setIsLoading(false);  // Set loading state to false once the data is fetched
+    }
+  };
+  
+  const fetchMenuUpdatedNumber = async () => {
+    try {
+      const vv = await getMessMenuUpdatedNumber();
+      return vv; 
+    } catch (error) {
+      console.error("Error fetching menu updated number:", error);
+      return 0; 
+    }
+  };
+  
+  const getData = async () => {
+    const fetchedValue = await fetchMenuUpdatedNumber(); 
+    const storedValue = parseInt(localStorage.getItem("isMenuUpdated") || "0", 10); 
+
+    if (!storedValue || storedValue < fetchedValue || !localStorage.getItem("menu")) {
+      await fetchMenuData();
+      localStorage.setItem("isMenuUpdated", fetchedValue); 
+    } else {
+      const storedMenu = JSON.parse(localStorage.getItem("menu"));
+      setMenu(storedMenu || {}); 
+      setIsLoading(false);  // Set loading state to false if data is from local storage
+    }
+  };
+
+  useEffect(() => {
+    (async () => {
+      await getData();
+    })();
+  }, []);
+
   const navigate = useNavigate();
+
+  if (isLoading) {
+    // Display loader while data is being fetched
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <div style={{ padding: "20px" }}>
@@ -37,13 +93,13 @@ export default function Menu() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {menu_items.map((menu, index) => (
+            {days.map((day, index) => (
               <TableRow key={index}>
-                <TableCell>{menu.day}</TableCell>
-                <TableCell>{menu.breakfast}</TableCell>
-                <TableCell>{menu.lunch}</TableCell>
-                <TableCell>{menu.snacks}</TableCell>
-                <TableCell>{menu.dinner}</TableCell>
+                <TableCell>{day}</TableCell>
+                <TableCell>{menu_items_from_web[day]?.breakFast || "N/A"}</TableCell>
+                <TableCell>{menu_items_from_web[day]?.lunch || "N/A"}</TableCell>
+                <TableCell>{menu_items_from_web[day]?.snacks || "N/A"}</TableCell>
+                <TableCell>{menu_items_from_web[day]?.dinner || "N/A"}</TableCell>
               </TableRow>
             ))}
           </TableBody>

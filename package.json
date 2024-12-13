@@ -11,12 +11,15 @@
     "@mui/x-data-grid": "^7.23.1",
     "@mui/x-date-pickers": "^7.23.1",
     "@mui/x-tree-view": "^7.23.0",
+    "axios": "^1.7.9",
     "cra-template": "1.2.0",
     "dayjs": "^1.11.13",
+    "firebase": "^11.1.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.0.2",
     "react-scripts": "^5.0.1",
+    "react-toastify": "^10.0.6",
     "web-vitals": "^4.2.4"
   },
   "scripts": {

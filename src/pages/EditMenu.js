@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { getAllMenuData } from "../api/getAllMenuData";
-import { FormatMessData } from "../utils/formatMessData";
+import  {formatMessData}  from "../utils/FormatMessData";
 import { getMessMenuUpdatedNumber } from "../api/getMessMenuUpdatedNumber";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -134,7 +134,7 @@ export default function EditMenu() {
         console.log("API Called")
         const res = await getAllMenuData();
         if (res.status === true) {
-          const formattedMenu = FormatMessData(res.data);
+          const formattedMenu = formatMessData(res.data);
           const menuItems = preprocessMenuItems(formattedMenu);
           console.log("Fetched and formatted menu data:", menuItems);
           setMenus(menuItems);

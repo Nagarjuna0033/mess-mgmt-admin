@@ -1,5 +1,5 @@
-import { db, collection, getDocs ,setDoc} from ".././utils/fireBaseConfig"
-
+import { db} from "../firebaseUtils/firebaseConfig"
+import {collection, getDocs ,setDoc} from "firebase/firestore"
 
 export const getAllInchargeDetails=async()=>{
     try {

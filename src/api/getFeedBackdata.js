@@ -1,4 +1,5 @@
-import { db, collection, getDocs } from ".././utils/fireBaseConfig"
+import { db } from "../firebaseUtils/firebaseConfig"
+import { getDocs,collection } from "firebase/firestore";
 
 
 export const getFeedBackData=async()=>{

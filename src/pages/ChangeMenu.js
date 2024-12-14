@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, Box } from "@mui/material";
 import { getAllMenuData } from "../api/getAllMenuData";
-import { FormatMessData } from "../utils/formatMessData";
+import { formatMessData } from "../utils/FormatMessData";
 import { getMessMenuUpdatedNumber } from "../api/getMessMenuUpdatedNumber";
 
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
@@ -15,7 +15,7 @@ export default function Menu() {
     try {
       const res = await getAllMenuData();
       if (res.status === true) {
-        let dd = FormatMessData(res.data);
+        let dd = formatMessData(res.data);
         console.log("Formatted Menu Data:", dd);
         localStorage.setItem("menu", JSON.stringify(dd)); 
         setMenu(dd); 

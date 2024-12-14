@@ -1,23 +1,10 @@
 import axios from "axios";
-const sendNotifications = async (title, payload, FCFS_TOKEN, type) => {
-  const options = {
-    method: "POST",
-    url: "https://us-central1-mess-management-250df.cloudfunctions.net/sendNotification",
-    headers: {
-      Accept: "/",
-      "Content-Type": "application/json",
-    },
-    data: {
-      payload: {
-        token: FCFS_TOKEN,
-        notification: { title: title, body: payload },
-        data: { type: type },
-      },
-    },
-  };
-
+const sendNotifications = async (payload) => {
   try {
-    const { data } = await axios.request(options);
+    const { data } = await axios.post(
+      "https://us-central1-mess-management-250df.cloudfunctions.net/sendNotification",
+      payload
+    );
     console.log(data);
     return 200;
   } catch (error) {

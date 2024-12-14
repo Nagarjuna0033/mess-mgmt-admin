@@ -8,6 +8,8 @@ import { styled } from "@mui/material/styles";
 import axios from "axios";
 import Modal from "@mui/material/Modal";
 import { toast } from "react-toastify";
+import { getUserInfo } from "../firebaseUtils/getRequests";
+import { sendNotifications } from "../firebaseUtils/sendNotificatoins";
 
 const Accordion = styled((props) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -52,6 +54,7 @@ export default function ComplaintCard({ complaint, index, getAllComplaints }) {
   const open = Boolean(anchorEl);
   const [modelOpen, setModelOpen] = React.useState(false);
   const [option, setOption] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
   const handleChange = (panel) => (event, newExpanded) => {
     setExpanded(newExpanded ? panel : false);
   };
@@ -72,23 +75,39 @@ export default function ComplaintCard({ complaint, index, getAllComplaints }) {
     handleClose();
   };
   const handleSingleResolve = async (id, uid) => {
-    // try {
-    //   console.log(id);
-    //   const res = await axios.get(
-    //     `https://us-central1-mess-management-250df.cloudfunctions.net/resolveComplaint?id=${id}&status=${option}`
-    //   );
-    //   console.log(res);
-    //   if (res.status === 200) {
-    //     toast.success(`Complaint moved to ${option} successfully`);
-    //     getAllComplaints();
-    //   } else {
-    //     toast.error(`Error in  moving Complaint to ${option}`);
-    //   }
-    //   handleModelClose();
-    // } catch (error) {
-    //   handleModelClose();
-    // }
-    console.log(uid);
+    setLoading(true);
+    try {
+      console.log(id);
+      const user = await getUserInfo(uid);
+      const res = await axios.get(
+        `https://us-central1-mess-management-250df.cloudfunctions.net/resolveComplaint?id=${id}&status=${option}`
+      );
+      console.log(user.FCS_TOKEN);
+      const notification = await sendNotifications({
+        payload: {
+          token: user.FCS_TOKEN,
+          notification: {
+            title: "Hurray 🥳🥳🥳",
+            body: "Take a look your issue has been resolved",
+          },
+          data: {
+            type: "complaint",
+          },
+        },
+      });
+      console.log(notification);
+      console.log(res);
+      if (res.status === 200) {
+        toast.success(`Complaint moved to ${option} successfully`);
+        getAllComplaints();
+      } else {
+        toast.error(`Error in  moving Complaint to ${option}`);
+      }
+      handleModelClose();
+    } catch (error) {
+      handleModelClose();
+    }
+    setLoading(false);
   };
 
   return (
@@ -110,6 +129,7 @@ export default function ComplaintCard({ complaint, index, getAllComplaints }) {
             onClick={() => {
               handleSingleResolve(complaint.id, complaint.uid);
             }}
+            disabled={loading}
           >
             Submit
           </Button>

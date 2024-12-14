@@ -7,7 +7,8 @@ import { styled } from "@mui/material/styles";
 import GoogleIcon from "@mui/icons-material/Google";
 import logo from "../images/rguktLogo.png";
 import { handleUserLogin } from "../firebaseUtils/login";
-
+import { ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
@@ -28,35 +29,41 @@ const Card = styled(MuiCard)(({ theme }) => ({
 
 export default function SignInCard() {
   const handleLogin = async () => {
-    await handleUserLogin();
+    try {
+      await handleUserLogin();
+    } catch (error) {
+      toast.error("Failed to login");
+    }
   };
   return (
-    <Card variant="elevation">
-      <Box sx={{ display: { xs: "flex", md: "none" } }}>
-        <img src={logo} alt="logo" />
-      </Box>
-      <Typography
-        component="h1"
-        variant="h5"
-        sx={{
-          width: "100%",
-          fontSize: "clamp(2rem, 10vw, 2.15rem)",
-          textAlign: "center",
-        }}
-      >
-        Sign in
-      </Typography>
-
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-        <Button
-          fullWidth
-          variant="contained"
-          onClick={handleLogin}
-          startIcon={<GoogleIcon />}
+    <>
+      <Card variant="elevation">
+        <Box sx={{ display: { xs: "flex", md: "none" } }}>
+          <img src={logo} alt="logo" />
+        </Box>
+        <Typography
+          component="h1"
+          variant="h5"
+          sx={{
+            width: "100%",
+            fontSize: "clamp(2rem, 10vw, 2.15rem)",
+            textAlign: "center",
+          }}
         >
-          Sign in with Google
-        </Button>
-      </Box>
-    </Card>
+          Sign in
+        </Typography>
+
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+          <Button
+            fullWidth
+            variant="contained"
+            onClick={handleLogin}
+            startIcon={<GoogleIcon />}
+          >
+            Sign in with Google
+          </Button>
+        </Box>
+      </Card>
+    </>
   );
 }

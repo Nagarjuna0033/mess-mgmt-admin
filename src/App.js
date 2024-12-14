@@ -18,17 +18,23 @@ import ChangeMesses from "./pages/ChangeMesses";
 import { auth } from "./firebaseUtils/firebaseConfig";
 import DetailsModel from "./components/DetailsModal";
 import { onAuthStateChanged } from "firebase/auth";
+import { toast, ToastContainer } from "react-toastify";
+import { LoginPrompt } from "./components/LoginPrompt";
 
 function App() {
   const [shouldShowDetailsModel, setShouldShowDetailsModel] = useState(false);
+  const [user, setUser] = useState(false);
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         const detailsIncomplete = localStorage.getItem("details") === "false";
         setShouldShowDetailsModel(detailsIncomplete);
+        toast.success("succsesfully logged in");
       } else {
         setShouldShowDetailsModel(false);
+        setUser(false);
       }
     });
 
@@ -37,15 +43,26 @@ function App() {
     };
   }, []);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (user) {
+        setShowLoginPrompt(true);
+      }
+    }, 30000);
+
+    return () => clearInterval(interval);
+  }, [user]);
+
   return (
     <div>
+      <ToastContainer />
       {shouldShowDetailsModel && (
         <DetailsModel
           open={shouldShowDetailsModel}
           onClose={() => setShouldShowDetailsModel(false)}
         />
       )}
-
+      {showLoginPrompt && <LoginPrompt />}
       <Routes>
         <Route path="/" element={<Dashboard />}>
           <Route path="/" element={<Home />} />

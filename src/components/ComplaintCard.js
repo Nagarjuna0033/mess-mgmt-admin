@@ -7,6 +7,8 @@ import MuiAccordionDetails from "@mui/material/AccordionDetails";
 import { styled } from "@mui/material/styles";
 import axios from "axios";
 import Modal from "@mui/material/Modal";
+import { toast } from "react-toastify";
+
 const Accordion = styled((props) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
 ))(({ theme }) => ({
@@ -69,23 +71,24 @@ export default function ComplaintCard({ complaint, index, getAllComplaints }) {
     setOption(option);
     handleClose();
   };
-  const handleSingleResolve = async (id) => {
-    try {
-      console.log(id);
-      const res = await axios.get(
-        `https://us-central1-mess-management-250df.cloudfunctions.net/resolveComplaint?id=${id}&status=${option}`
-      );
-      console.log(res);
-      if (res.status === 200) {
-        alert("document updated successfully");
-        getAllComplaints();
-      } else {
-        alert("failed to udpate document status");
-      }
-      handleModelClose();
-    } catch (error) {
-      handleModelClose();
-    }
+  const handleSingleResolve = async (id, uid) => {
+    // try {
+    //   console.log(id);
+    //   const res = await axios.get(
+    //     `https://us-central1-mess-management-250df.cloudfunctions.net/resolveComplaint?id=${id}&status=${option}`
+    //   );
+    //   console.log(res);
+    //   if (res.status === 200) {
+    //     toast.success(`Complaint moved to ${option} successfully`);
+    //     getAllComplaints();
+    //   } else {
+    //     toast.error(`Error in  moving Complaint to ${option}`);
+    //   }
+    //   handleModelClose();
+    // } catch (error) {
+    //   handleModelClose();
+    // }
+    console.log(uid);
   };
 
   return (
@@ -105,7 +108,7 @@ export default function ComplaintCard({ complaint, index, getAllComplaints }) {
             variant="outlined"
             color="secondary"
             onClick={() => {
-              handleSingleResolve(complaint.id);
+              handleSingleResolve(complaint.id, complaint.uid);
             }}
           >
             Submit
@@ -192,7 +195,7 @@ export default function ComplaintCard({ complaint, index, getAllComplaints }) {
                   </Menu>
                 </Box>
               )}
-              <h3>Complaint Came from Mess 2</h3>
+              <h3>Complaint Came from {complaint.mess}</h3>
               <Typography>{complaint.description}</Typography>
             </Box>
           </Box>

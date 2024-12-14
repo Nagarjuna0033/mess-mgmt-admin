@@ -6,7 +6,6 @@ const logoutUser = () => {
     .then(() => {
       localStorage.removeItem("currentUser");
       localStorage.removeItem("details");
-      alert("User logged out successfully ");
     })
     .catch((error) => {
       "error in logging out user";

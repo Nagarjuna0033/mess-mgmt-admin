@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { getAllMenuData } from "../api/getAllMenuData";
-import  {formatMessData}  from "../utils/FormatMessData";
+import { formatMessData } from "../utils/formatMessData";
 import { getMessMenuUpdatedNumber } from "../api/getMessMenuUpdatedNumber";
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer } from 'react-toastify';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 import {
   Table,
@@ -45,9 +45,8 @@ const availableItems = [
   "Vegetable Curry",
 ];
 
-function EditMenuTable({ menus, onMenuChange, onSubmit }) {
+function EditMenuTable({ menus, onMenuChange, onSubmit, loading }) {
   return (
-    
     <TableContainer component={Paper} style={{ margin: "20px 0" }}>
       <Table>
         <TableHead>
@@ -94,7 +93,12 @@ function EditMenuTable({ menus, onMenuChange, onSubmit }) {
           ))}
           <TableRow>
             <TableCell colSpan={5} align="center">
-              <Button variant="outlined" color="secondary" onClick={onSubmit}>
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={onSubmit}
+                disabled={loading}
+              >
                 Submit Changes
               </Button>
             </TableCell>
@@ -106,15 +110,16 @@ function EditMenuTable({ menus, onMenuChange, onSubmit }) {
 }
 
 export default function EditMenu() {
+  const [loading, setLoading] = useState(false);
   const fetchMenuUpdatedNumber = async () => {
-      try {
-        const vv = await getMessMenuUpdatedNumber();
-        return vv; 
-      } catch (error) {
-        console.error("Error fetching menu updated number:", error);
-        return 0; 
-      }
-    };
+    try {
+      const vv = await getMessMenuUpdatedNumber();
+      return vv;
+    } catch (error) {
+      console.error("Error fetching menu updated number:", error);
+      return 0;
+    }
+  };
 
   const preprocessMenuItems = (menuData) => {
     return Object.keys(menuData).map((day) => {
@@ -131,41 +136,45 @@ export default function EditMenu() {
 
   const fetchMenuData = async () => {
     try {
-        console.log("API Called")
-        const res = await getAllMenuData();
-        if (res.status === true) {
-          const formattedMenu = formatMessData(res.data);
-          const menuItems = preprocessMenuItems(formattedMenu);
-          console.log("Fetched and formatted menu data:", menuItems);
-          setMenus(menuItems);
-          localStorage.setItem("menuData", JSON.stringify(menuItems));
-        } else {
-          console.log(res.msg);
-        }
-      
+      console.log("API Called");
+      const res = await getAllMenuData();
+      if (res.status === true) {
+        const formattedMenu = formatMessData(res.data);
+        const menuItems = preprocessMenuItems(formattedMenu);
+        console.log("Fetched and formatted menu data:", menuItems);
+        setMenus(menuItems);
+        localStorage.setItem("menuData", JSON.stringify(menuItems));
+      } else {
+        console.log(res.msg);
+      }
     } catch (error) {
       console.error("Error fetching menu data:", error);
     }
   };
 
   const getData = async () => {
-    const fetchedValue = await fetchMenuUpdatedNumber(); 
-    const storedValue = parseInt(localStorage.getItem("isEditMenuUpdated") || "0", 10); 
+    const fetchedValue = await fetchMenuUpdatedNumber();
+    const storedValue = parseInt(
+      localStorage.getItem("isEditMenuUpdated") || "0",
+      10
+    );
 
-  
-    if (!storedValue || storedValue < fetchedValue || !localStorage.getItem("menuData")) {
+    if (
+      !storedValue ||
+      storedValue < fetchedValue ||
+      !localStorage.getItem("menuData")
+    ) {
       await fetchMenuData();
-      localStorage.setItem("isEditMenuUpdated", fetchedValue); 
+      localStorage.setItem("isEditMenuUpdated", fetchedValue);
     } else {
       const storedMenu = JSON.parse(localStorage.getItem("menuData"));
-      setMenus(storedMenu || {}); 
+      setMenus(storedMenu || {});
     }
   };
 
   const [menus, setMenus] = useState([]);
 
   useEffect(() => {
-    
     getData();
   }, []);
 
@@ -177,38 +186,38 @@ export default function EditMenu() {
   };
 
   const handleSubmit = async () => {
+    setLoading(true);
     try {
-      console.log(menus)
-        // Make the API call to update the menu on the server
-        const response = await fetch("https://us-central1-mess-management-250df.cloudfunctions.net/addMessMenu", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(menus),
-        });
-
-        // Check if the response is successful (status 200-299)
-        if (response.ok) {
-            // Show a success toast message
-            toast.success("Menu updated successfully!");
-
-            // Save the updated menu to localStorage
-            localStorage.setItem("menuData", JSON.stringify(menus));
-
-            console.log("Menu updated on server successfully!");
-        } else {
-            // Handle API errors (e.g., show an error message)
-            const errorData = await response.json();
-            console.error("Error updating menu:", errorData.message);
-            toast.error("Failed to update menu.");
+      console.log(menus);
+      // Make the API call to update the menu on the server
+      const response = await fetch(
+        "https://us-central1-mess-management-250df.cloudfunctions.net/addMessMenu",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(menus),
         }
-    } catch (error) {
-        console.error("Error in handleSubmit:", error);
-        toast.error("Failed to update menu.");
-    }
-};
+      );
 
+      if (response.ok) {
+        toast.success("Menu updated successfully!");
+
+        localStorage.setItem("menuData", JSON.stringify(menus));
+        console.log("Menu updated on server successfully!");
+      } else {
+        const errorData = await response.json();
+        console.error("Error updating menu:", errorData.message);
+        toast.error("Failed to update menu.");
+      }
+      setLoading(false);
+    } catch (error) {
+      console.error("Error in handleSubmit:", error);
+      toast.error("Failed to update menu.");
+      setLoading(false);
+    }
+  };
 
   return (
     <div style={{ padding: "20px", width: "100%" }}>
@@ -220,6 +229,7 @@ export default function EditMenu() {
         menus={menus}
         onMenuChange={handleInputChange}
         onSubmit={handleSubmit}
+        loading={loading}
       />
     </div>
   );

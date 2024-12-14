@@ -11,109 +11,114 @@ import {
   Paper,
 } from "@mui/material";
 import axios from "axios";
-import {getAllInchargeDetails} from "../api/getMessInchargeDetails"
-
+import { getAllInchargeDetails } from "../api/getMessInchargeDetails";
+import { toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 function MessInchargesTable({ messDetails }) {
   const [details, setDetails] = useState(messDetails);
+  const [loading, setLoading] = useState(false);
 
-  // Ensure the details prop is updated when messDetails changes
   useEffect(() => {
     setDetails(messDetails);
   }, [messDetails]);
 
-  // Handle input changes
   const handleInputChange = (index, field, value) => {
     const updatedDetails = [...details];
     updatedDetails[index][field] = value;
     setDetails(updatedDetails);
   };
 
-  // Save updated details using POST request with axios
   const handleSave = async () => {
+    setLoading(true);
     try {
       console.log("Updated Details:", details);
 
-      const response = await axios.post(
+      await axios.post(
         "https://us-central1-mess-management-250df.cloudfunctions.net/editMessIncharge",
         details
       );
-
-      console.log("Response:", response.data);
-      alert("Details Saved!");
+      toast.success("Details saved!");
     } catch (error) {
       console.error("Error:", error);
-      alert("Failed to save details!");
+      toast.error("Failed to save details!");
     }
+    setLoading(false);
   };
 
-  console.log("Rendering details:", details); // Debug log to ensure data is passed and updated correctly
-
   return (
-    <TableContainer component={Paper}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Mess Name</TableCell>
-            <TableCell>Incharge Name</TableCell>
-            <TableCell>Phone</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {details && details.length > 0 ? (
-            details.map((row, index) => (
-              <TableRow key={index}>
-                <TableCell>
-                  <TextField
-                    fullWidth
-                    value={row.messName}
-                    onChange={(e) =>
-                      handleInputChange(index, "messName", e.target.value)
-                    }
-                    variant="outlined"
-                    size="small"
-                  />
-                </TableCell>
-                <TableCell>
-                  <TextField
-                    fullWidth
-                    value={row.InchargeName}
-                    onChange={(e) =>
-                      handleInputChange(index, "InchargeName", e.target.value)
-                    }
-                    variant="outlined"
-                    size="small"
-                  />
-                </TableCell>
-                <TableCell>
-                  <TextField
-                    fullWidth
-                    value={row.phone}
-                    onChange={(e) =>
-                      handleInputChange(index, "phone", e.target.value)
-                    }
-                    variant="outlined"
-                    size="small"
-                  />
+    <>
+      <ToastContainer />
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Mess Name</TableCell>
+              <TableCell>Incharge Name</TableCell>
+              <TableCell>Phone</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {details && details.length > 0 ? (
+              details.map((row, index) => (
+                <TableRow key={index}>
+                  <TableCell>
+                    <TextField
+                      fullWidth
+                      value={row.messName}
+                      onChange={(e) =>
+                        handleInputChange(index, "messName", e.target.value)
+                      }
+                      variant="outlined"
+                      size="small"
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <TextField
+                      fullWidth
+                      value={row.InchargeName}
+                      onChange={(e) =>
+                        handleInputChange(index, "InchargeName", e.target.value)
+                      }
+                      variant="outlined"
+                      size="small"
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <TextField
+                      fullWidth
+                      value={row.phone}
+                      onChange={(e) =>
+                        handleInputChange(index, "phone", e.target.value)
+                      }
+                      variant="outlined"
+                      size="small"
+                    />
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={3} align="center">
+                  No data available
                 </TableCell>
               </TableRow>
-            ))
-          ) : (
+            )}
             <TableRow>
               <TableCell colSpan={3} align="center">
-                No data available
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={handleSave}
+                  disabled={loading}
+                >
+                  Save All Changes
+                </Button>
               </TableCell>
             </TableRow>
-          )}
-          <TableRow>
-            <TableCell colSpan={3} align="center">
-              <Button variant="outlined" color="secondary" onClick={handleSave}>
-                Save All Changes
-              </Button>
-            </TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
   );
 }
 

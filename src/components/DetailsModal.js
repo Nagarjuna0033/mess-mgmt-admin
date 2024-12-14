@@ -12,9 +12,9 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { createUser } from "../firebaseUtils/createDoc";
-
+import { ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 export default function DetailsModel({ open, onClose }) {
-  console.log(auth.currentUser && localStorage.getItem("details") === "false");
   const [formData, setFormData] = React.useState({
     email: auth.currentUser?.email || "",
     name: auth.currentUser?.displayName || "",
@@ -37,15 +37,17 @@ export default function DetailsModel({ open, onClose }) {
       const res = await createUser(formData);
       if (res === 200) {
         localStorage.setItem("details", "true");
+        toast.success("Profile Saved successfully");
         onClose();
       }
     } catch (error) {
       console.log(error);
+      toast.error("Failed to Save profile");
     }
   };
   return (
     <React.Fragment>
-      <Button variant="outlined">Open form dialog</Button>
+      <ToastContainer />
       <Dialog open={open}>
         <DialogTitle>Subscribe</DialogTitle>
         <DialogContent>

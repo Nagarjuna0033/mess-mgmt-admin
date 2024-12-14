@@ -4,6 +4,8 @@ import Filters from "../components/Filters";
 import { Box, Button, Stack } from "@mui/material";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 export default function AllComplaints() {
   const [complaints, setComplaints] = useState(null);
@@ -52,8 +54,13 @@ export default function AllComplaints() {
       if (res.status === 200) {
         await getAllComplaints();
         setCategory("");
+        toast.success(
+          `Complaint with category ${category} moved to status done`
+        );
       } else {
-        alert("failed to udpate documents with the given status");
+        toast.error(
+          `Error in moving Complaint with category ${category} to status done`
+        );
       }
       setLoading(false);
     } catch (error) {
@@ -64,6 +71,7 @@ export default function AllComplaints() {
 
   return (
     <>
+      <ToastContainer />
       <Stack sx={{ width: "100%" }}>
         <Stack
           direction="row"

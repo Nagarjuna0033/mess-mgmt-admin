@@ -9,7 +9,6 @@ const handleUserLogin = async () => {
     const credential = GoogleAuthProvider.credentialFromResult(result);
     const token = credential.accessToken;
     const user = result.user;
-    console.log("token : ", token, "user: ", user);
 
     const check = await isInDb(user.uid);
     console.log(check);

@@ -20,6 +20,7 @@ function MenuCard() {
 
   const [todayMenu, setTodaysMenu] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  // eslint-disable-next-line no-unused-vars
   const [menuItemsFromWeb, setMenu] = useState({});
 
   const fetchMenuData = async () => {
@@ -85,6 +86,7 @@ function MenuCard() {
     (async () => {
       await getData();
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (isLoading) {

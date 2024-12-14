@@ -176,6 +176,7 @@ export default function EditMenu() {
 
   useEffect(() => {
     getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleInputChange = (e, dayIndex, mealType) => {

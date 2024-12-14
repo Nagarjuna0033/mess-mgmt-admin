@@ -74,7 +74,7 @@ export default function Menu() {
   return (
     <div style={{ padding: "20px" }}>
       <Button
-        variant="contained"
+        variant="outlined"
         color="secondary"
         onClick={() => navigate("/menu-change")}
         style={{ marginBottom: "20px" }}

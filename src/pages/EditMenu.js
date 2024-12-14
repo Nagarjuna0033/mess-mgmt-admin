@@ -94,7 +94,7 @@ function EditMenuTable({ menus, onMenuChange, onSubmit }) {
           ))}
           <TableRow>
             <TableCell colSpan={5} align="center">
-              <Button variant="contained" color="secondary" onClick={onSubmit}>
+              <Button variant="outlined" color="secondary" onClick={onSubmit}>
                 Submit Changes
               </Button>
             </TableCell>

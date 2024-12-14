@@ -25,7 +25,7 @@ export default function SendFeedbackNotification() {
           textAlign="center"
           sx={{ mt: 3 }}
         >
-          Send FeedBack Notification
+          Send Feedback Notification
         </Typography>
     
       <CustomDatePicker
@@ -39,7 +39,7 @@ export default function SendFeedbackNotification() {
         label="End Date"
       />
       <Button
-        variant="contained"
+        variant="outlined"
         color="secondary"
         onClick={handleSendNotification}
       >

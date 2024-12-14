@@ -106,7 +106,7 @@ function MessInchargesTable({ messDetails }) {
           )}
           <TableRow>
             <TableCell colSpan={3} align="center">
-              <Button variant="contained" color="secondary" onClick={handleSave}>
+              <Button variant="outlined" color="secondary" onClick={handleSave}>
                 Save All Changes
               </Button>
             </TableCell>

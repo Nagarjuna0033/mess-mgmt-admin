@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -11,11 +11,11 @@ import {
   Button,
   Paper,
   Typography,
-  Grid2,
+  CircularProgress,
 } from "@mui/material";
+import { getAllMessses, getInitialMessesAllocation,setMessAllocation } from "../api/getMessInchargeDetails";
 
-
-const ChangeMessesTable = ({ messData, messOptions }) => {
+const ChangeMessesTable = ({ messData, messOptions, onSave }) => {
   const [data, setData] = useState(messData);
 
   const handleChange = (key, value) => {
@@ -27,6 +27,7 @@ const ChangeMessesTable = ({ messData, messOptions }) => {
 
   const handleSave = () => {
     console.log("Updated Data:", data);
+    onSave(data);
     alert("Mess assignments updated successfully!");
   };
 
@@ -91,7 +92,7 @@ const ChangeMessesTable = ({ messData, messOptions }) => {
           ))}
           <TableRow>
             <TableCell colSpan={4} align="center">
-              <Button variant="contained" color="secondary" onClick={handleSave}>
+              <Button variant="outlined" color="secondary" onClick={handleSave}>
                 Save Changes
               </Button>
             </TableCell>
@@ -103,49 +104,49 @@ const ChangeMessesTable = ({ messData, messOptions }) => {
 };
 
 const ChangeMesses = () => {
-  const initial = {
-    P1Boys: "Mess1",
-    P1Girls: "Mess2",
-    P2Boys: "Mess3",
-    P2Girls: "Mess4",
-    E1Boys: "Mess5",
-    E1Girls: "Mess6",
-    E2Boys: "Mess7",
-    E2Girls: "Mess8",
-    E3Boys: "Mess9",
-    E3Girls: "Mess10",
-    E4Boys: "Mess1",
-    E4Girls: "Mess2",
+  const [messData, setMessData] = useState({});
+  const [messOptions, setMessOptions] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchData = async () => {
+    try {
+      const messesOptions = await getAllMessses();
+      const messesInitialData = await getInitialMessesAllocation(); 
+      
+      setMessOptions(messesOptions);
+      setMessData(messesInitialData);
+    } catch (error) {
+      console.error("Error fetching mess data:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const messOptions = [
-    "Mess1",
-    "Mess2",
-    "Mess3",
-    "Mess4",
-    "Mess5",
-    "Mess6",
-    "Mess7",
-    "Mess8",
-    "Mess9",
-    "Mess10",
-  ];
+  const handleSave =async (updatedData) => {
+    await setMessAllocation(updatedData)
+    console.log("Final saved data:", updatedData);
+   
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
+        <CircularProgress />
+      </div>
+    );
+  }
 
   return (
     <div>
-        <Typography
-          variant="h5"
-          fontWeight="bold"
-          textAlign="center"
-          sx={{ mt: 3 }}
-        >
-          Change Mess Assignments
-        </Typography>
-        <ChangeMessesTable messData={initial} messOptions={messOptions} />
-      </div>
-
-      
-    
+      <Typography variant="h5" fontWeight="bold" textAlign="center" sx={{ mt: 3 }}>
+        Change Mess Assignments
+      </Typography>
+      <ChangeMessesTable messData={messData} messOptions={messOptions} onSave={handleSave} />
+    </div>
   );
 };
 

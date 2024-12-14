@@ -10,18 +10,6 @@ export default function FeedBackAnalyticsGraph({ data }) {
         setSelectedMessIndex(Number(e.target.value));
     };
 
-    const xLabels = [
-        'Timeliness',
-        'Neatness/cleanliness',
-        'Food quality',
-        'Taste of curries',
-        'Snacks And Breakfast',
-        'Quantity of food',
-        'Employee courtesy',
-        'Uniform wearing',
-        'Cooking as per menu',
-        'Cleanliness of wash area',
-    ];
 
     const average = data.map((item) => item.overallAverage);
 
@@ -111,7 +99,7 @@ export default function FeedBackAnalyticsGraph({ data }) {
 
             <FeedbackBarChart
                 title={data[selectedMessIndex].mess}
-                xLabels={xLabels}
+                xLabels={ Object.keys(data[0].categories)}
                 yLabels={yLabels}
                 style={{
                     marginTop: '20px',

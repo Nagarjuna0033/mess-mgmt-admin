@@ -1,24 +1,32 @@
 import React, { useState } from "react";
 import { Box, TextField, Typography, Button, Stack } from "@mui/material";
-
+import { useLocation } from "react-router-dom";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import { auth } from "../firebaseUtils/firebaseConfig";
+import { updateUser } from "../firebaseUtils/createDoc";
+import { useNavigate } from "react-router-dom";
 const EditProfile = () => {
-  const [profile, setProfile] = useState({
-    name: "J.Revanth Kumar",
-    designation: "Director",
-    mail: "director@rguktrkv.ac.in",
-    mobileNumber: "9030808053",
-  });
-
+  const location = useLocation();
+  const navigate = useNavigate();
+  console.log(location.state);
+  const [profile, setProfile] = useState(location.state || {});
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProfile((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSave = () => {
-    alert(
-      `Profile saved!\nName: ${profile.name}\nMobile: ${profile.mobileNumber}`
-    );
-    // You can add logic here to send the updated profile to a server.
+  const handleSave = async () => {
+    try {
+      const res = await updateUser(profile);
+      if (res === 200) {
+        navigate("/profile");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -40,38 +48,41 @@ const EditProfile = () => {
           label="Name"
           id="outlined"
           name="name"
-          variant="filled"
+          variant="standard"
           value={profile.name}
           onChange={handleChange}
           fullWidth
         />
         <TextField
           label="Mobile Number"
-          name="mobileNumber"
-          variant="filled"
-          value={profile.mobileNumber}
+          name="phoneNumber"
+          variant="standard"
+          value={profile.phoneNumber}
           onChange={handleChange}
           fullWidth
         />
 
         <TextField
           label="Email"
-          value={profile.mail}
-          variant="filled"
+          value={auth.currentUser.email}
+          variant="standard"
           InputProps={{
             readOnly: true,
           }}
           fullWidth
         />
-        <TextField
-          label="Designation"
-          value={profile.designation}
-          InputProps={{
-            readOnly: true,
-          }}
-          fullWidth
-          variant="filled"
-        />
+        <FormControl variant="standard" sx={{ minWidth: "100%" }}>
+          <InputLabel>Gender</InputLabel>
+          <Select
+            name="gender"
+            defaultValue={profile.gender}
+            onChange={handleChange}
+            required
+          >
+            <MenuItem value="Male">Male</MenuItem>
+            <MenuItem value="Female">Female</MenuItem>
+          </Select>
+        </FormControl>
       </Stack>
 
       <Box sx={{ textAlign: "center", marginTop: 3 }}>

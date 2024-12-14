@@ -5,7 +5,6 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import Stack from "@mui/material/Stack";
 import PhoneIcon from "@mui/icons-material/Phone";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
@@ -87,13 +86,13 @@ function MessInchargeDetailsCard() {
 }
 
 MessInchargeDetailsCard.propTypes = {
-    messDetails: PropTypes.arrayOf(
-        PropTypes.shape({
-            messName: PropTypes.string.isRequired,
-            inchargeName: PropTypes.string.isRequired,
-            phone: PropTypes.string.isRequired,
-        })
-    ).isRequired,
+  messDetails: PropTypes.arrayOf(
+    PropTypes.shape({
+      messName: PropTypes.string.isRequired,
+      inchargeName: PropTypes.string.isRequired,
+      phone: PropTypes.string.isRequired,
+    })
+  ).isRequired,
 };
 
 export default MessInchargeDetailsCard;

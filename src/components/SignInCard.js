@@ -5,6 +5,9 @@ import MuiCard from "@mui/material/Card";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
 import GoogleIcon from "@mui/icons-material/Google";
+import logo from "../images/rguktLogo.png";
+import { handleUserLogin } from "../firebaseUtils/login";
+
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
@@ -24,11 +27,14 @@ const Card = styled(MuiCard)(({ theme }) => ({
 }));
 
 export default function SignInCard() {
+  const handleLogin = async () => {
+    await handleUserLogin();
+  };
   return (
-    <Card variant="outlined">
-      {/* <Box sx={{ display: { xs: "flex", md: "none" } }}>
-        <SitemarkIcon />
-      </Box> */}
+    <Card variant="elevation">
+      <Box sx={{ display: { xs: "flex", md: "none" } }}>
+        <img src={logo} alt="logo" />
+      </Box>
       <Typography
         component="h1"
         variant="h5"
@@ -45,7 +51,7 @@ export default function SignInCard() {
         <Button
           fullWidth
           variant="contained"
-          onClick={() => alert("Sign in with Google")}
+          onClick={handleLogin}
           startIcon={<GoogleIcon />}
         >
           Sign in with Google

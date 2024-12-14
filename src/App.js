@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import Dashboard from "./pages/Dashboard";
 import ComplaintAnalytics from "./pages/ComplaintAnalytics";
 import OverAllAnalytics from "./pages/OverAllAnalytics";
@@ -14,10 +15,37 @@ import MessInchargePage from "./pages/EditMessIncharges";
 import SignIn from "./pages/SignIn";
 import EditProfile from "./pages/EditProfile";
 import ChangeMesses from "./pages/ChangeMesses";
+import { auth } from "./firebaseUtils/firebaseConfig";
+import DetailsModel from "./components/DetailsModal";
+import { onAuthStateChanged } from "firebase/auth";
 
 function App() {
+  const [shouldShowDetailsModel, setShouldShowDetailsModel] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const detailsIncomplete = localStorage.getItem("details") === "false";
+        setShouldShowDetailsModel(detailsIncomplete);
+      } else {
+        setShouldShowDetailsModel(false);
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
   return (
     <div>
+      {shouldShowDetailsModel && (
+        <DetailsModel
+          open={shouldShowDetailsModel}
+          onClose={() => setShouldShowDetailsModel(false)}
+        />
+      )}
+
       <Routes>
         <Route path="/" element={<Dashboard />}>
           <Route path="/" element={<Home />} />

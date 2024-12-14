@@ -30,8 +30,6 @@ export default function NavbarBreadcrumbs() {
         return ["Dashboard", "Edit InCharge"];
       case "/menu-change":
         return ["Dashboard", "Edit Menu"];
-      case "/editIncharge":
-        return ["Dashboard", "Edit InCharge"];
       case "/profile":
         return ["Dashboard", "Profile"];
       case "/edit-profile":
@@ -54,7 +52,13 @@ export default function NavbarBreadcrumbs() {
         <Typography
           key={index}
           variant="body1"
-          sx={{ color: index === breadcrumbs.length - 1 ? 'text.primary' : 'text.secondary', fontWeight: index === breadcrumbs.length - 1 ? 600 : 400 }}
+          sx={{
+            color:
+              index === breadcrumbs.length - 1
+                ? "text.primary"
+                : "text.secondary",
+            fontWeight: index === breadcrumbs.length - 1 ? 600 : 400,
+          }}
         >
           {text}
         </Typography>

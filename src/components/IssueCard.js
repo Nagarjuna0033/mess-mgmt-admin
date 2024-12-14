@@ -38,7 +38,7 @@ export default function IssueCard({ issue, index }) {
             textOverflow: "ellipsis",
           }}
         >
-          {issue.name}
+          {issue.title}
         </Typography>
         <Stack direction="row" spacing={1} alignItems="center">
           <Chip

@@ -5,43 +5,96 @@ import {
   Card,
   CardContent,
   Typography,
+  CircularProgress,
   Stack,
   Button,
 } from "@mui/material";
 import { formatMessData } from "../utils/formatMessData";
 import { useNavigate } from "react-router-dom";
 import { getAllMenuData } from "../api/getAllMenuData";
-import axios from "axios";
-function MenuCard({ menu }) {
-  const navigate = useNavigate();
-  const [todayMenu, setTodayMenu] = React.useState(null);
-  React.useEffect(() => {
-    getAllMenu();
-  }, []);
+import { useState, useEffect } from "react";
+import { getMessMenuUpdatedNumber } from "../api/getMessMenuUpdatedNumber";
 
-  const getAllMenu = async () => {
+function MenuCard() {
+  const navigate = useNavigate();
+
+  const [todayMenu, setTodaysMenu] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [menuItemsFromWeb, setMenu] = useState({});
+
+  const fetchMenuData = async () => {
     try {
-      const res = await axios.get(
-        "https://us-central1-mess-management-250df.cloudfunctions.net/getAllMen",
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      console.log(res.data.data);
-      const transformedList = formatMessData(res);
-      const today = new Date().toLocaleDateString("en-US", { weekday: "long" });
-      const todaysMeals = transformedList[today];
-      if (todaysMeals) {
-        setTodayMenu(todaysMeals);
+      const res = await getAllMenuData();
+      if (res.status === true) {
+        const formattedData = formatMessData(res.data);
+        
+
+        localStorage.setItem("menu", JSON.stringify(formattedData));
+        setMenu(formattedData);
+
+        const today = new Date().toLocaleDateString("en-US", { weekday: "long" });
+        setTodaysMenu(formattedData[today] || []);
+        console.log(formattedData[today])
       } else {
-        console.log(`No meals found for ${today}`);
+        console.error("Error message from API:", res.msg);
       }
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching menu data:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  const fetchMenuUpdatedNumber = async () => {
+    try {
+      const response = await getMessMenuUpdatedNumber();
+      return response;
+    } catch (error) {
+      console.error("Error fetching menu updated number:", error);
+      return 0;
+    }
+  };
+
+  const getData = async () => {
+    const fetchedValue = await fetchMenuUpdatedNumber();
+    const storedValue = parseInt(localStorage.getItem("isMenuUpdated") || "0", 10);
+
+    if (
+      !storedValue ||
+      storedValue < fetchedValue ||
+      !localStorage.getItem("menu")
+    ) {
+      await fetchMenuData();
+      localStorage.setItem("isMenuUpdated", fetchedValue);
+    } else {
+      const storedMenu = JSON.parse(localStorage.getItem("menu"));
+      setMenu(storedMenu || {});
+      
+      const today = new Date().toLocaleDateString("en-US", { weekday: "long" });
+      console.log(storedMenu[today])
+      setTodaysMenu(storedMenu[today] || []);
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    (async () => {
+      await getData();
+    })();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <Card variant="outlined" sx={{ height: "100%", flexGrow: 1, boxShadow: 3 }}>
@@ -67,46 +120,46 @@ function MenuCard({ menu }) {
         </Box>
 
         <Stack direction="column" spacing={2}>
-          {todayMenu &&
-            Object.entries(todayMenu).map(([day, mealPlan], index) => {
-              console.log(`Day: ${day}`);
-              console.log("Meals:", mealPlan);
-
-              return (
-                <Box
-                  key={index}
+          {todayMenu ? (
+            Object.entries(todayMenu).map(([mealType, description], index) => (
+              <Box
+                key={index}
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 1,
+                  padding: "12px",
+                  borderRadius: 1,
+                  backgroundColor:
+                    index % 2 === 0 ? "action.hover" : "transparent",
+                  boxShadow: 1,
+                  transition: "background-color 0.3s ease-in-out",
+                  "&:hover": {
+                    backgroundColor: "action.selected",
+                    boxShadow: 3,
+                  },
+                }}
+              >
+                <Typography variant="body1" sx={{ fontWeight: 600 }}>
+                  {mealType.charAt(0).toUpperCase() + mealType.slice(1)}
+                </Typography>
+                <Typography
+                  variant="body2"
                   sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 1,
-                    padding: "12px",
-                    borderRadius: 1,
-                    backgroundColor:
-                      index % 2 === 0 ? "action.hover" : "transparent",
-                    boxShadow: 1,
-                    transition: "background-color 0.3s ease-in-out",
-                    "&:hover": {
-                      backgroundColor: "action.selected",
-                      boxShadow: 3,
-                    },
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
                   }}
                 >
-                  <Typography variant="body1" sx={{ fontWeight: 600 }}>
-                    {day}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                    }}
-                  >
-                    {mealPlan}
-                  </Typography>
-                </Box>
-              );
-            })}
+                  {description}
+                </Typography>
+              </Box>
+            ))
+          ) : (
+            <Typography variant="body2" color="textSecondary">
+              No meals available for today.
+            </Typography>
+          )}
         </Stack>
       </CardContent>
     </Card>

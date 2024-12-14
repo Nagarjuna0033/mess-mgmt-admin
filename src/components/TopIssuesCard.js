@@ -56,7 +56,7 @@ function TopIssuesCard({ fromIssues = false }) {
         </Box>
 
         <Stack direction="column" spacing={2} sx={{ paddingTop: "15px" }}>
-          {sortedIssues &&
+          {sortedIssues && !fromIssues && 
             sortedIssues.map(
               (issue, index) =>
                 index < 5 && (

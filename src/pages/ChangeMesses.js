@@ -11,9 +11,7 @@ import {
   Button,
   Paper,
   Typography,
-  Grid2,
 } from "@mui/material";
-
 
 const ChangeMessesTable = ({ messData, messOptions }) => {
   const [data, setData] = useState(messData);
@@ -91,7 +89,11 @@ const ChangeMessesTable = ({ messData, messOptions }) => {
           ))}
           <TableRow>
             <TableCell colSpan={4} align="center">
-              <Button variant="contained" color="secondary" onClick={handleSave}>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={handleSave}
+              >
                 Save Changes
               </Button>
             </TableCell>
@@ -133,19 +135,16 @@ const ChangeMesses = () => {
 
   return (
     <div>
-        <Typography
-          variant="h5"
-          fontWeight="bold"
-          textAlign="center"
-          sx={{ mt: 3 }}
-        >
-          Change Mess Assignments
-        </Typography>
-        <ChangeMessesTable messData={initial} messOptions={messOptions} />
-      </div>
-
-      
-    
+      <Typography
+        variant="h5"
+        fontWeight="bold"
+        textAlign="center"
+        sx={{ mt: 3 }}
+      >
+        Change Mess Assignments
+      </Typography>
+      <ChangeMessesTable messData={initial} messOptions={messOptions} />
+    </div>
   );
 };
 

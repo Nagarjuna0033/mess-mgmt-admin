@@ -1,14 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Typography, Button, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { TextField } from "@mui/material";
+import { getUserInfo } from "../firebaseUtils/getRequests";
+import { auth } from "../firebaseUtils/firebaseConfig";
 const Profile = () => {
   const navigate = useNavigate();
-  const profile = {
-    name: "J.Revanth Kumar",
-    designation: "Director",
-    mail: "director@rguktrkv.ac.in",
-    mobileNumber: "9030808053",
+
+  const [profile, setProfile] = useState(null);
+  useEffect(() => {
+    getUserDetails();
+  }, []);
+
+  const getUserDetails = async () => {
+    if (auth.currentUser) {
+      const res = await getUserInfo(auth.currentUser.uid);
+      setProfile(res);
+    } else {
+      console.log("No user is logged in.");
+    }
   };
 
   return (
@@ -26,30 +36,31 @@ const Profile = () => {
           Profile Details
         </Typography>
         <TextField
-          label="Name"
-          value={profile.name}
-          slotProps={{
-            inputLabel: {
-              shrink: true,
-            },
-          }}
-          fullWidth
-          variant="filled"
-        />
-        <TextField
-          label="Designation"
-          value={profile.designation}
-          slotProps={{
-            inputLabel: {
-              shrink: true,
-            },
-          }}
-          fullWidth
-          variant="filled"
-        />
-        <TextField
           label="Email"
-          value={profile.mail}
+          value={auth.currentUser.email}
+          slotProps={{
+            inputLabel: {
+              shrink: true,
+            },
+          }}
+          fullWidth
+          variant="filled"
+        />
+        <TextField
+          label="Name"
+          value={profile && profile.name}
+          slotProps={{
+            inputLabel: {
+              shrink: true,
+            },
+          }}
+          fullWidth
+          variant="filled"
+        />
+
+        <TextField
+          label="Mobile"
+          value={profile && profile.phoneNumber}
           slotProps={{
             inputLabel: {
               shrink: true,
@@ -60,7 +71,7 @@ const Profile = () => {
         />
         <TextField
           label="Mobile"
-          value={profile.mobileNumber}
+          value={profile && profile.gender}
           slotProps={{
             inputLabel: {
               shrink: true,
@@ -75,7 +86,7 @@ const Profile = () => {
         <Button
           variant="outlined"
           color="secondary"
-          onClick={() => navigate("/edit-profile")}
+          onClick={() => navigate("/edit-profile", { state: profile })}
         >
           Edit Profile
         </Button>

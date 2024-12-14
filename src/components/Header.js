@@ -1,8 +1,7 @@
 import * as React from "react";
 import Stack from "@mui/material/Stack";
-import rguktLogo from "../images/rguktLogo.png"
+import rguktLogo from "../images/rguktLogo.png";
 import NavbarBreadcrumbs from "./NavbarBreadcrumbs";
-import { useNavigate } from "react-router-dom";
 
 import ColorModeIconDropdown from "../shared-theme/ColorModeIconDropdown";
 
@@ -10,7 +9,6 @@ import { Box, Typography } from "@mui/material";
 
 export default function Header() {
   return (
-    
     <Stack
       direction="row"
       sx={{
@@ -30,22 +28,22 @@ export default function Header() {
         justifyContent="center"
         sx={{ padding: 2 }}
       >
-        <Box component="img"
+        <Box
+          component="img"
           src={rguktLogo}
           alt="Mess Logo"
           sx={{ width: 40, height: 40, marginRight: 2 }}
         />
         <Typography
           sx={{
-           
-            fontSize: '1.5rem', 
-            fontWeight: 'bold'
+            fontSize: "1.5rem",
+            fontWeight: "bold",
           }}
         >
           RGUKT Mess Management System
         </Typography>
       </Box>
-      
+
       <Stack direction="row" sx={{ gap: 1 }}>
         <ColorModeIconDropdown />
       </Stack>

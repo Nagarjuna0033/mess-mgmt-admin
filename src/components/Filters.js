@@ -4,13 +4,17 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
-export default function CheckboxesTags({setCategory}) {
-  const [age, setAge] = React.useState("");
+export default function CheckboxesTags({ setCategory, category }) {
   const [open, setOpen] = React.useState(false);
+  const [value, setValue] = React.useState("");
 
+  React.useEffect(() => {
+    setValue(category);
+  }, [category]);
   const handleChange = (event) => {
-    setAge(event.target.value);
-    setCategory(event.target.value)
+    const selectedValue = event.target.value;
+    setValue(selectedValue);
+    setCategory(selectedValue);
   };
 
   const handleClose = () => {
@@ -30,29 +34,34 @@ export default function CheckboxesTags({setCategory}) {
           open={open}
           onClose={handleClose}
           onOpen={handleOpen}
-          value={age}
+          value={value}
           label="Age"
           onChange={handleChange}
         >
-          <MenuItem value="">
-            All
+          <MenuItem value="">All</MenuItem>
+          <MenuItem value="Hygiene">Hygiene</MenuItem>
+          <MenuItem value="neatness_cleanliness">
+            Neatness/Cleanliness (tables, surroundings)
           </MenuItem>
-          <MenuItem value="timeliness">Timeliness</MenuItem>
-          <MenuItem value="neatness_cleanliness">Neatness/Cleanliness (tables, surroundings)</MenuItem>
           <MenuItem value="food_quality">Food Quality</MenuItem>
           <MenuItem value="taste_of_curries">Taste of Curries</MenuItem>
-          <MenuItem value="snacks_tea_coffee_breakfast">Snacks, Tea, Coffee, and Breakfast</MenuItem>
-          <MenuItem value="quantity_of_food">Quantity of Food as per Menu</MenuItem>
+          <MenuItem value="snacks_tea_coffee_breakfast">
+            Snacks, Tea, Coffee, and Breakfast
+          </MenuItem>
+          <MenuItem value="quantity_of_food">
+            Quantity of Food as per Menu
+          </MenuItem>
           <MenuItem value="employee_courtesy">Employee Courtesy</MenuItem>
-          <MenuItem value="uniform_wearing">Uniform Wearing by Employees</MenuItem>
+          <MenuItem value="uniform_wearing">
+            Uniform Wearing by Employees
+          </MenuItem>
           <MenuItem value="cooking_as_per_menu">Cooking as per Menu</MenuItem>
-          <MenuItem value="cleanliness_of_wash_basins">Cleanliness of Wash Basins and Wash Area</MenuItem>
+          <MenuItem value="cleanliness_of_wash_basins">
+            Cleanliness of Wash Basins and Wash Area
+          </MenuItem>
           <MenuItem value="others">Others</MenuItem>
-
         </Select>
       </FormControl>
     </div>
   );
 }
-
-

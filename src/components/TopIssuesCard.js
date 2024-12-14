@@ -8,11 +8,24 @@ import Stack from "@mui/material/Stack";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import IssueCard from "./IssueCard";
-
-function TopIssuesCard({ issues, fromIssues = false }) {
+import { getIssues } from "../firebaseUtils/getRequests";
+function TopIssuesCard({ fromIssues = false }) {
   const navigate = useNavigate();
-  // Sort issues by upvotes in descending order
-  const sortedIssues = issues.sort((a, b) => b.upvotes - a.upvotes);
+  const [sortedIssues, setSortedIssues] = React.useState(null);
+  React.useEffect(() => {
+    getAllIssues();
+  }, []);
+
+  const getAllIssues = async () => {
+    try {
+      const res = await getIssues();
+      console.log(res);
+      const sorted = res.sort((a, b) => b.upvotes - a.upvotes);
+      setSortedIssues(sorted);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <Card
@@ -33,7 +46,7 @@ function TopIssuesCard({ issues, fromIssues = false }) {
           </Typography>
           {!fromIssues && (
             <Button
-              variant="contained"
+              variant="outlined"
               color="secondary"
               onClick={() => navigate("/current-issues")}
             >
@@ -43,9 +56,18 @@ function TopIssuesCard({ issues, fromIssues = false }) {
         </Box>
 
         <Stack direction="column" spacing={2} sx={{ paddingTop: "15px" }}>
-          {sortedIssues.map((issue, index) => (
-            <IssueCard issue={issue} index={index} key={index} />
-          ))}
+          {sortedIssues &&
+            sortedIssues.map(
+              (issue, index) =>
+                index < 5 && (
+                  <IssueCard issue={issue} index={index} key={index} />
+                )
+            )}
+          {fromIssues &&
+            sortedIssues &&
+            sortedIssues.map((issue, index) => (
+              <IssueCard issue={issue} index={index} key={index} />
+            ))}
         </Stack>
       </CardContent>
     </Card>

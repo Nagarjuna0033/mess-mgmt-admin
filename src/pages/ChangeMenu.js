@@ -13,7 +13,7 @@ import {
   Box,
 } from "@mui/material";
 import { getAllMenuData } from "../api/getAllMenuData";
-import { formatMessData } from "../utils/formatMessData";
+import { formatMessData } from "../utils/FormatMessData";
 import { getMessMenuUpdatedNumber } from "../api/getMessMenuUpdatedNumber";
 
 const days = [

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { getAllMenuData } from "../api/getAllMenuData";
-import { formatMessData } from "../utils/formatMessData";
+import { formatMessData } from "../utils/FormatMessData";
 import { getMessMenuUpdatedNumber } from "../api/getMessMenuUpdatedNumber";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

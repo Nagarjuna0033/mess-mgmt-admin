@@ -9,7 +9,7 @@ import {
   Stack,
   Button,
 } from "@mui/material";
-import { formatMessData } from "../utils/formatMessData";
+import { formatMessData } from "../utils/FormatMessData";
 import { useNavigate } from "react-router-dom";
 import { getAllMenuData } from "../api/getAllMenuData";
 import { useState, useEffect } from "react";

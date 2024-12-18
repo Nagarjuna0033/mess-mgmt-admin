@@ -10,6 +10,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
+import axios from "axios";
 
 export default function SendFeedbackNotification() {
   const [startDate, setStartDate] = useState(null);
@@ -19,16 +20,17 @@ export default function SendFeedbackNotification() {
     setLoading(true);
     console.log(startDate);
     if (startDate && endDate) {
+      const tokens = await axios.get(
+        "https://us-central1-mess-management-250df.cloudfunctions.net/getFcmTokens"
+      );
       await sendNotifications({
         payload: {
-          tokens: [
-            "dfuw0VcVSVSuwkYJZTp3FL:APA91bHCegEXm1ogcfUfSKhjGJKpIS70KOv-F0UliM8EHY3-6M5YSl3wUHWx0vXHv1xOyHOwqUFEd-SN7YUzJ7sLx9LIruzz4Z4owkIGa5MkIPALXzxor6w",
-          ],
+          tokens: tokens.data.tokens,
           data: {
             navigate: "true",
             page: "menu",
             title: "Mess Feedback",
-            body: "Submit your mess feedback",
+            body: `Submit your mess feedback from  ${startDate} to ${endDate}`,
           },
         },
       });

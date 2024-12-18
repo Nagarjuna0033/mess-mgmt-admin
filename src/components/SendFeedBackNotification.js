@@ -28,7 +28,7 @@ export default function SendFeedbackNotification() {
           tokens: tokens.data.tokens,
           data: {
             navigate: "true",
-            page: "menu",
+            page: "feedback",
             title: "Mess Feedback",
             body: `Submit your mess feedback from  ${startDate} to ${endDate}`,
           },

@@ -21,37 +21,18 @@ export default function SendFeedbackNotification() {
     if (startDate && endDate) {
       await sendNotifications({
         payload: {
-          token:
+          tokens: [
             "dfuw0VcVSVSuwkYJZTp3FL:APA91bHCegEXm1ogcfUfSKhjGJKpIS70KOv-F0UliM8EHY3-6M5YSl3wUHWx0vXHv1xOyHOwqUFEd-SN7YUzJ7sLx9LIruzz4Z4owkIGa5MkIPALXzxor6w",
-
-          notification: {
-            title: "Hey ✋✋✋",
-            body: `Please Submit Mess Feedback from ${startDate} to ${endDate}`,
-          },
+          ],
           data: {
-            type: "feedback",
+            navigate: "true",
+            page: "menu",
+            title: "Mess Feedback",
+            body: "Submit your mess feedback",
           },
         },
       });
-      // const tokens = [
-      //   "e48GdzhsSOqwFYi2rlnlGv:APA91bEJoVnzZPjg8DStCMzsmfpQKUoE6MxBmRBgjzTtVo2CIKf73p1wUFjTyaaVLvCo0taeOoUSfh6XNEU8gFjfnQ0RcOu9QI14bRQ2PIk7M0X-Axg7LOg",
-      //   "e31PaxtgTay_-gIcPNFABx:APA91bE1rEoXwkuTCfR6YSaxzPlqKXddkzLvCTins1CGCK3u5D6Fg0v98dNnOw_oDlIJVgS4rQKr3KRaAk47qG_lxB-KJbAfkaWfbno-C3LqmT6DFTm-dnk",
-      // ];
 
-      // for (const token of tokens) {
-      //   await sendNotifications({
-      //     payload: {
-      //       token,
-      //       notification: {
-      //         title: "Hey ✋✋✋",
-      //         body: `Please Submit Mess Feedback from ${startDate} to ${endDate}`,
-      //       },
-      //       data: {
-      //         type: "feedback",
-      //       },
-      //     },
-      //   });
-      // }
       toast.success("Notificaion sent successfully");
     } else {
       toast.error("Please select both start and end dates!");

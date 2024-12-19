@@ -1,4 +1,11 @@
-import { getDocs, collection, doc, getDoc } from "firebase/firestore";
+import {
+  getDocs,
+  collection,
+  doc,
+  getDoc,
+  query,
+  where,
+} from "firebase/firestore";
 import { db } from "./firebaseConfig";
 const getIssues = async () => {
   try {
@@ -73,4 +80,34 @@ const getUserInfo = async (uid) => {
   }
 };
 
-export { getIssues, getComplaintCat, getComplaints, isInDb, getUserInfo };
+const getUserInfoByEmail = async (email) => {
+  if (!email) {
+    console.log("Email is required.");
+    return;
+  }
+
+  try {
+    const usersCollection = collection(db, "users");
+
+    const q = query(usersCollection, where("email", "==", email));
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      const userData = querySnapshot.docs[0].data();
+      return userData;
+    } else {
+      console.log("No user found with the given email");
+    }
+  } catch (error) {
+    console.error("Error fetching user details by email:", error);
+  }
+};
+
+export {
+  getIssues,
+  getComplaintCat,
+  getComplaints,
+  isInDb,
+  getUserInfo,
+  getUserInfoByEmail,
+};

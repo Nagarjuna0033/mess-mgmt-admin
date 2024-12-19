@@ -1,5 +1,5 @@
 import { db } from "./firebaseConfig";
-import { doc, setDoc, updateDoc } from "firebase/firestore";
+import { doc, setDoc, updateDoc, deleteField } from "firebase/firestore";
 
 const createUser = async (payload) => {
   console.log(payload);
@@ -27,4 +27,25 @@ const updateUser = async (payload) => {
     return 500;
   }
 };
-export { createUser, updateUser };
+
+const removeRoleField = async (docId) => {
+  if (!docId) {
+    console.log("Document ID is required.");
+    return;
+  }
+
+  try {
+    const docRef = doc(db, "users", docId);
+
+    await updateDoc(docRef, {
+      role: deleteField(),
+    });
+
+    console.log("Role field removed successfully.");
+    return 200;
+  } catch (error) {
+    console.error("Error removing role field:", error);
+    return 500;
+  }
+};
+export { createUser, updateUser, removeRoleField };

@@ -82,16 +82,14 @@ export default function ComplaintCard({ complaint, index, getAllComplaints }) {
       const res = await axios.get(
         `https://us-central1-mess-management-250df.cloudfunctions.net/resolveComplaint?id=${id}&status=${option}`
       );
-      console.log(user.FCS_TOKEN);
       const notification = await sendNotifications({
         payload: {
-          token: user.FCS_TOKEN,
-          notification: {
-            title: "Hurray 🥳🥳🥳",
-            body: "Take a look your issue has been resolved",
-          },
+          tokens: [user.FCS_TOKEN],
           data: {
-            type: "complaint",
+            navigate: "true",
+            page: "profile",
+            title: "Hey 🔥🔥🔥",
+            body: "Your issue has been resolved",
           },
         },
       });

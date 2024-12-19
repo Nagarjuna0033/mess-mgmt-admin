@@ -7,6 +7,7 @@ const handleUserLogin = async () => {
   try {
     const result = await signInWithPopup(auth, provider);
     const credential = GoogleAuthProvider.credentialFromResult(result);
+    // eslint-disable-next-line no-unused-vars
     const token = credential.accessToken;
     const user = result.user;
 

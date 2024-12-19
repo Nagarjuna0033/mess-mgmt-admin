@@ -1,34 +1,40 @@
 import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
-import CustomDatePicker from "./CustomDatePicker";
 import { Typography } from "@mui/material";
 import { sendNotifications } from "../firebaseUtils/sendNotificatoins";
 import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import dayjs from "dayjs";
+import axios from "axios";
+
 export default function SendFeedbackNotification() {
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   const [loading, setLoading] = useState(false);
   const handleSendNotification = async () => {
     setLoading(true);
     console.log(startDate);
     if (startDate && endDate) {
-      // await sendNotifications({
-      //   payload: {
-      //     token: [
-      //       "e48GdzhsSOqwFYi2rlnlGv:APA91bEJoVnzZPjg8DStCMzsmfpQKUoE6MxBmRBgjzTtVo2CIKf73p1wUFjTyaaVLvCo0taeOoUSfh6XNEU8gFjfnQ0RcOu9QI14bRQ2PIk7M0X-Axg7LOg",
-      //       "e31PaxtgTay_-gIcPNFABx:APA91bE1rEoXwkuTCfR6YSaxzPlqKXddkzLvCTins1CGCK3u5D6Fg0v98dNnOw_oDlIJVgS4rQKr3KRaAk47qG_lxB-KJbAfkaWfbno-C3LqmT6DFTm-dnk",
-      //     ],
-      //     notification: {
-      //       title: "Hey ✋✋✋",
-      //       body: "Please Submit Mess Feedback for this month",
-      //     },
-      //     data: {
-      //       type: "feedback",
-      //     },
-      //   },
-      // });
+      const tokens = await axios.get(
+        "https://us-central1-mess-management-250df.cloudfunctions.net/getFcmTokens"
+      );
+      await sendNotifications({
+        payload: {
+          tokens: tokens.data.tokens,
+          data: {
+            navigate: "true",
+            page: "feedback",
+            title: "Mess Feedback",
+            body: `Submit your mess feedback from  ${startDate} to ${endDate}`,
+          },
+        },
+      });
+
       toast.success("Notificaion sent successfully");
     } else {
       toast.error("Please select both start and end dates!");
@@ -49,21 +55,32 @@ export default function SendFeedbackNotification() {
           Send Feedback Notification
         </Typography>
 
-        <CustomDatePicker
-          value={startDate}
-          onChange={(date) => {
-            setStartDate(date);
-          }}
-          label="Start Date"
-        />
-        <CustomDatePicker
-          value={endDate}
-          onChange={(date) => {
-            console.log(date);
-            setEndDate(date);
-          }}
-          label="End Date"
-        />
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DemoContainer components={["DatePicker"]}>
+            <DatePicker
+              value={startDate ? dayjs(startDate) : null}
+              onChange={(newValue) => {
+                const formattedDate = newValue
+                  ? newValue.format("YYYY-MM-DD")
+                  : null;
+                setStartDate(formattedDate);
+              }}
+            />
+          </DemoContainer>
+        </LocalizationProvider>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DemoContainer components={["DatePicker"]}>
+            <DatePicker
+              value={endDate ? dayjs(endDate) : null}
+              onChange={(newValue) => {
+                const formattedDate = newValue
+                  ? newValue.format("YYYY-MM-DD")
+                  : null;
+                setEndDate(formattedDate);
+              }}
+            />
+          </DemoContainer>
+        </LocalizationProvider>
         <Button
           variant="outlined"
           color="secondary"

@@ -7,7 +7,6 @@ import { styled } from "@mui/material/styles";
 import GoogleIcon from "@mui/icons-material/Google";
 import logo from "../images/rguktLogo.png";
 import { handleUserLogin } from "../firebaseUtils/login";
-import { ToastContainer } from "react-toastify";
 import { toast } from "react-toastify";
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",

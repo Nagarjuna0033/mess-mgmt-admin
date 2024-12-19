@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { getAllMenuData } from "../api/getAllMenuData";
-import { formatMessData } from "../utils/formatMessData";
+import { formatMessData } from "../utils/FormatMessData";
 import { getMessMenuUpdatedNumber } from "../api/getMessMenuUpdatedNumber";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -176,6 +176,7 @@ export default function EditMenu() {
 
   useEffect(() => {
     getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleInputChange = (e, dayIndex, mealType) => {

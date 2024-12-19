@@ -9,7 +9,7 @@ import {
   Stack,
   Button,
 } from "@mui/material";
-import { formatMessData } from "../utils/formatMessData";
+import { formatMessData } from "../utils/FormatMessData";
 import { useNavigate } from "react-router-dom";
 import { getAllMenuData } from "../api/getAllMenuData";
 import { useState, useEffect } from "react";
@@ -20,6 +20,7 @@ function MenuCard() {
 
   const [todayMenu, setTodaysMenu] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  // eslint-disable-next-line no-unused-vars
   const [menuItemsFromWeb, setMenu] = useState({});
 
   const fetchMenuData = async () => {
@@ -27,14 +28,15 @@ function MenuCard() {
       const res = await getAllMenuData();
       if (res.status === true) {
         const formattedData = formatMessData(res.data);
-        
 
         localStorage.setItem("menu", JSON.stringify(formattedData));
         setMenu(formattedData);
 
-        const today = new Date().toLocaleDateString("en-US", { weekday: "long" });
+        const today = new Date().toLocaleDateString("en-US", {
+          weekday: "long",
+        });
         setTodaysMenu(formattedData[today] || []);
-        console.log(formattedData[today])
+        console.log(formattedData[today]);
       } else {
         console.error("Error message from API:", res.msg);
       }
@@ -57,7 +59,10 @@ function MenuCard() {
 
   const getData = async () => {
     const fetchedValue = await fetchMenuUpdatedNumber();
-    const storedValue = parseInt(localStorage.getItem("isMenuUpdated") || "0", 10);
+    const storedValue = parseInt(
+      localStorage.getItem("isMenuUpdated") || "0",
+      10
+    );
 
     if (
       !storedValue ||
@@ -69,9 +74,9 @@ function MenuCard() {
     } else {
       const storedMenu = JSON.parse(localStorage.getItem("menu"));
       setMenu(storedMenu || {});
-      
+
       const today = new Date().toLocaleDateString("en-US", { weekday: "long" });
-      console.log(storedMenu[today])
+      console.log(storedMenu[today]);
       setTodaysMenu(storedMenu[today] || []);
       setIsLoading(false);
     }
@@ -81,6 +86,7 @@ function MenuCard() {
     (async () => {
       await getData();
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (isLoading) {

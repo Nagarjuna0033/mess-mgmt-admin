@@ -59,6 +59,11 @@ const tertiaryListItems = [
     icon: <RestaurantMenuRoundedIcon />,
     path: "/change-messes",
   },
+  {
+    text: "Assign Mess Coordinators",
+    icon: <EditRoundedIcon />,
+    path: "/Assign",
+  },
 ];
 
 export default function MenuContent() {

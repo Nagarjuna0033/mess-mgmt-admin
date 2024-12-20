@@ -1,24 +1,26 @@
-import * as React from 'react';
-import FormControl from '@mui/material/FormControl';
-import InputAdornment from '@mui/material/InputAdornment';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
+import * as React from "react";
+import FormControl from "@mui/material/FormControl";
+import InputAdornment from "@mui/material/InputAdornment";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 
-export default function Search() {
+export default function Search({ onChange, type = "text", value }) {
   return (
-    <FormControl sx={{ width: { xs: '100%', md: '25ch' } }} variant="outlined">
+    <FormControl sx={{ width: { xs: "100%", md: "100%" } }} variant="outlined">
       <OutlinedInput
-        size="small"
         id="search"
-        placeholder="Search…"
+        placeholder="Search for email…"
+        type={type}
         sx={{ flexGrow: 1 }}
         startAdornment={
-          <InputAdornment position="start" sx={{ color: 'text.primary' }}>
-            <SearchRoundedIcon fontSize="small" />
+          <InputAdornment position="start" sx={{ color: "text.primary" }}>
+            <SearchRoundedIcon />
           </InputAdornment>
         }
+        value={value}
+        onChange={onChange}
         inputProps={{
-          'aria-label': 'search',
+          "aria-label": "search",
         }}
       />
     </FormControl>

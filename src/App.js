@@ -15,6 +15,7 @@ import MessInchargePage from "./pages/EditMessIncharges";
 import SignIn from "./pages/SignIn";
 import EditProfile from "./pages/EditProfile";
 import ChangeMesses from "./pages/ChangeMesses";
+import Assign from "./pages/Assign";
 import { auth } from "./firebaseUtils/firebaseConfig";
 import DetailsModel from "./components/DetailsModal";
 import { onAuthStateChanged } from "firebase/auth";
@@ -84,6 +85,7 @@ function App() {
 
           <Route path="/profile" element={<Profile />} />
           <Route path="/edit-profile" element={<EditProfile />} />
+          <Route path="/Assign" element={<Assign />} />
         </Route>
         <Route path="/Auth/Login" element={<SignIn />} />
       </Routes>

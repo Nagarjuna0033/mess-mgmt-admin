@@ -5,6 +5,8 @@ import { getMessMenuUpdatedNumber } from "../api/getMessMenuUpdatedNumber";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+import { sendNotifications } from "../firebaseUtils/sendNotificatoins";
+import axios from "axios";
 
 import {
   Table,
@@ -204,6 +206,20 @@ export default function EditMenu() {
 
       if (response.ok) {
         toast.success("Menu updated successfully!");
+        const tokens = await axios.get(
+          "https://us-central1-mess-management-250df.cloudfunctions.net/getFcmTokens"
+        );
+        await sendNotifications({
+          payload: {
+            tokens: tokens.data.tokens,
+            data: {
+              navigate: "true",
+              page: "feedback",
+              title: "Mess Menu Changed",
+              body: "Have a look at the new Mess Menu , It is Changed",
+            },
+          },
+        });
 
         localStorage.setItem("menuData", JSON.stringify(menus));
         console.log("Menu updated on server successfully!");

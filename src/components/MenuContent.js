@@ -64,6 +64,12 @@ const tertiaryListItems = [
     icon: <EditRoundedIcon />,
     path: "/Assign",
   },
+  {
+    text: "Send Announcement",
+    icon: <EditRoundedIcon />,
+    path: "/SendNotice",
+  },
+
 ];
 
 export default function MenuContent() {

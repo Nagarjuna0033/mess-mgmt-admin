@@ -8,6 +8,7 @@
     "@mui/icons-material": "^6.1.10",
     "@mui/lab": "^6.0.0-beta.20",
     "@mui/material": "^6.1.10",
+    "@mui/system": "^6.2.1",
     "@mui/x-charts": "^7.23.1",
     "@mui/x-data-grid": "^7.23.1",
     "@mui/x-date-pickers": "^7.23.1",
@@ -22,6 +23,7 @@
     "react-router-dom": "^7.0.2",
     "react-scripts": "^5.0.1",
     "react-toastify": "^10.0.6",
+    "styled": "^1.0.0",
     "web-vitals": "^4.2.4"
   },
   "scripts": {

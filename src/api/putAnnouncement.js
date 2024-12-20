@@ -1,11 +1,11 @@
 import { db } from "../firebaseUtils/firebaseConfig";
-import { collection } from "firebase/firestore";
+import { collection, addDoc } from "firebase/firestore";
 
 
 export const addAnnouncement = async (data) => {
     try {
       
-      const docRef = await addDoc(collection(db, "Notification"), data);
+      await addDoc(collection(db, "Notification"), data);
         
       return { success: true, message: "Announcement added successfully" };
     } catch (error) {

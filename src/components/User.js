@@ -46,10 +46,14 @@ export default function User({ user, setUser }) {
     handleMenuClose();
     setIsLoading(true);
     try {
-      user.role = "mess coordinator";
-      const res = user.role
-        ? await removeRoleField(user.uid)
-        : await updateUser(user);
+      let res;
+
+      if (user.role) {
+        res = await removeRoleField(user.uid);
+      } else {
+        user.role = "mess coordinator";
+        res = await updateUser(user);
+      }
       if (res.status === 200 && !user.role) {
         await sendNotifications({
           payload: {

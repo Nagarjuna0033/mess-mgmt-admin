@@ -21,6 +21,7 @@ import DetailsModel from "./components/DetailsModal";
 import { onAuthStateChanged } from "firebase/auth";
 import { toast, ToastContainer } from "react-toastify";
 import { LoginPrompt } from "./components/LoginPrompt";
+import SendNotice from "./pages/SendNotice";
 
 function App() {
   const [shouldShowDetailsModel, setShouldShowDetailsModel] = useState(false);
@@ -86,6 +87,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/edit-profile" element={<EditProfile />} />
           <Route path="/Assign" element={<Assign />} />
+          <Route path="/SendNotice" element={<SendNotice user={user}/>} />
         </Route>
         <Route path="/Auth/Login" element={<SignIn />} />
       </Routes>

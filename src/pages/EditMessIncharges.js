@@ -14,6 +14,8 @@ import axios from "axios";
 import { getAllInchargeDetails } from "../api/getMessInchargeDetails";
 import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
+import { sendNotifications } from "../firebaseUtils/sendNotificatoins";
+
 function MessInchargesTable({ messDetails }) {
   const [details, setDetails] = useState(messDetails);
   const [loading, setLoading] = useState(false);
@@ -37,6 +39,22 @@ function MessInchargesTable({ messDetails }) {
         "https://us-central1-mess-management-250df.cloudfunctions.net/editMessIncharge",
         details
       );
+
+      const tokens = await axios.get(
+        "https://us-central1-mess-management-250df.cloudfunctions.net/getFcmTokens"
+      );
+      await sendNotifications({
+        payload: {
+          tokens: tokens.data.tokens,
+          data: {
+            navigate: "true",
+            page: "feedback",
+            title: "Mess Incharges Changed",
+            body: "Mess Incharges are Changed Please Have a look",
+          },
+        },
+      });
+
       toast.success("Details saved!");
     } catch (error) {
       console.error("Error:", error);

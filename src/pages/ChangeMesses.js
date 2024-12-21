@@ -13,7 +13,11 @@ import {
   Typography,
   CircularProgress,
 } from "@mui/material";
-import { getAllMessses, getInitialMessesAllocation,setMessAllocation } from "../api/getMessInchargeDetails";
+import { getAllMessses, getInitialMessesAllocation, setMessAllocation } from "../api/getMessInchargeDetails";
+import axios from "axios";
+import { sendNotifications } from "../firebaseUtils/sendNotificatoins";
+import { toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 
 const ChangeMessesTable = ({ messData, messOptions, onSave }) => {
   const [data, setData] = useState(messData);
@@ -28,7 +32,7 @@ const ChangeMessesTable = ({ messData, messOptions, onSave }) => {
   const handleSave = () => {
     console.log("Updated Data:", data);
     onSave(data);
-    alert("Mess assignments updated successfully!");
+    
   };
 
   const groupedKeys = Object.keys(data).reduce((acc, key, index) => {
@@ -111,8 +115,8 @@ const ChangeMesses = () => {
   const fetchData = async () => {
     try {
       const messesOptions = await getAllMessses();
-      const messesInitialData = await getInitialMessesAllocation(); 
-      
+      const messesInitialData = await getInitialMessesAllocation();
+
       setMessOptions(messesOptions);
       setMessData(messesInitialData);
     } catch (error) {
@@ -122,10 +126,31 @@ const ChangeMesses = () => {
     }
   };
 
-  const handleSave =async (updatedData) => {
-    await setMessAllocation(updatedData)
-    console.log("Final saved data:", updatedData);
-   
+  const handleSave = async (updatedData) => {
+    try {
+
+      await setMessAllocation(updatedData)
+
+      const tokens = await axios.get(
+        "https://us-central1-mess-management-250df.cloudfunctions.net/getFcmTokens"
+      );
+      await sendNotifications({
+        payload: {
+          tokens: tokens.data.tokens,
+          data: {
+            navigate: "true",
+            page: "feedback",
+            title: "Mess Allotment Changed",
+            body: "Mess Allotments Changed see what's your new mess",
+          },
+        },
+      });
+      toast.success("Updated Successfully");
+
+    } catch (error) {
+      toast.error("Something went wrong");
+    }
+
   };
 
   useEffect(() => {
@@ -142,6 +167,7 @@ const ChangeMesses = () => {
 
   return (
     <div>
+      <ToastContainer />
       <Typography variant="h5" fontWeight="bold" textAlign="center" sx={{ mt: 3 }}>
         Change Mess Assignments
       </Typography>

@@ -113,6 +113,8 @@ function EditMenuTable({ menus, onMenuChange, onSubmit, loading }) {
 
 export default function EditMenu() {
   const [loading, setLoading] = useState(false);
+  const api = process.env.REACT_APP_GET_FCM_TOKENS;
+  const addMessMenuApi = process.env.REACT_APP_ADD_MESS_MENU;
   const fetchMenuUpdatedNumber = async () => {
     try {
       const vv = await getMessMenuUpdatedNumber();
@@ -185,30 +187,24 @@ export default function EditMenu() {
     const updatedMenus = [...menus];
     updatedMenus[dayIndex][mealType] = e.target.value;
     setMenus(updatedMenus);
-    localStorage.setItem("menuData", JSON.stringify(updatedMenus)); // Save to localStorage
+    localStorage.setItem("menuData", JSON.stringify(updatedMenus));
   };
 
   const handleSubmit = async () => {
     setLoading(true);
     try {
       console.log(menus);
-      // Make the API call to update the menu on the server
-      const response = await fetch(
-        "https://us-central1-mess-management-250df.cloudfunctions.net/addMessMenu",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(menus),
-        }
-      );
+      const response = await fetch(addMessMenuApi, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(menus),
+      });
 
       if (response.ok) {
         toast.success("Menu updated successfully!");
-        const tokens = await axios.get(
-          "https://us-central1-mess-management-250df.cloudfunctions.net/getFcmTokens"
-        );
+        const tokens = await axios.get(api);
         await sendNotifications({
           payload: {
             tokens: tokens.data.tokens,

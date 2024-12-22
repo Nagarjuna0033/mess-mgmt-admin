@@ -16,13 +16,12 @@ export default function SendFeedbackNotification() {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [loading, setLoading] = useState(false);
+  const api = process.env.REACT_APP_GET_FCM_TOKENS;
   const handleSendNotification = async () => {
     setLoading(true);
     console.log(startDate);
     if (startDate && endDate) {
-      const tokens = await axios.get(
-        "https://us-central1-mess-management-250df.cloudfunctions.net/getFcmTokens"
-      );
+      const tokens = await axios.get(api);
       await sendNotifications({
         payload: {
           tokens: tokens.data.tokens,

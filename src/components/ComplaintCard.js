@@ -55,6 +55,7 @@ export default function ComplaintCard({ complaint, index, getAllComplaints }) {
   const [modelOpen, setModelOpen] = React.useState(false);
   const [option, setOption] = React.useState("");
   const [loading, setLoading] = React.useState(false);
+  const api = process.env.REACT_APP_RESOLVE_COMPLAINT;
   const handleChange = (panel) => (event, newExpanded) => {
     setExpanded(newExpanded ? panel : false);
   };
@@ -79,9 +80,7 @@ export default function ComplaintCard({ complaint, index, getAllComplaints }) {
     try {
       console.log(id);
       const user = await getUserInfo(uid);
-      const res = await axios.get(
-        `https://us-central1-mess-management-250df.cloudfunctions.net/resolveComplaint?id=${id}&status=${option}`
-      );
+      const res = await axios.get(`${api}?id=${id}&status=${option}`);
       const notification = await sendNotifications({
         payload: {
           tokens: [user.FCS_TOKEN],

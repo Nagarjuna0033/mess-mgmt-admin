@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -7,35 +7,35 @@ import {
   Typography,
   Grid,
   Paper,
-} from '@mui/material';
+} from "@mui/material";
 import { toast } from "react-toastify";
 import { ToastContainer } from "react-toastify";
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '../firebaseUtils/firebaseConfig';
-import { addAnnouncement } from '../api/putAnnouncement';
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../firebaseUtils/firebaseConfig";
+import { addAnnouncement } from "../api/putAnnouncement";
 import { sendNotifications } from "../firebaseUtils/sendNotificatoins";
-import axios from 'axios';
-import { getDesignation } from '../utils/getDesignation';
+import axios from "axios";
+import { getDesignation } from "../utils/getDesignation";
 
 const theme = createTheme({
   palette: {
-    mode: 'dark',
+    mode: "dark",
     primary: {
-      main: '#6200ea',
+      main: "#6200ea",
     },
     background: {
-      default: '#121212',
+      default: "#121212",
     },
   },
   typography: {
-    fontFamily: 'Roboto, sans-serif',
+    fontFamily: "Roboto, sans-serif",
   },
 });
 
 const SendNotice = () => {
   const [user, setUser] = useState(null);
-
+  const api = process.env.REACT_APP_GET_FCM_TOKENS;
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
@@ -48,24 +48,21 @@ const SendNotice = () => {
     return () => unsubscribe();
   }, []);
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (user) {
       const noticeData = {
         title: e.target.title.value,
         description: e.target.description.value,
-        name: user.displayName || 'N/A',
-        designation: getDesignation(user.email.split('@')[0]),
-        time: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
-        imageURL:user["photoURL"]
+        name: user.displayName || "N/A",
+        designation: getDesignation(user.email.split("@")[0]),
+        time: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
+        imageURL: user["photoURL"],
       };
-      const res=await addAnnouncement(noticeData)
-      if(res.success)
-      {
+      const res = await addAnnouncement(noticeData);
+      if (res.success) {
         toast.success("Announcement Sent Successfully");
-        const tokens = await axios.get(
-          "https://us-central1-mess-management-250df.cloudfunctions.net/getFcmTokens"
-        );
+        const tokens = await axios.get(api);
         await sendNotifications({
           payload: {
             tokens: tokens.data.tokens,
@@ -77,14 +74,11 @@ const SendNotice = () => {
             },
           },
         });
-      }
-      else
-      {
+      } else {
         toast.error("Announcement Sent Failed");
       }
-      
     } else {
-      console.log('No user is logged in.');
+      console.log("No user is logged in.");
     }
   };
 
@@ -135,7 +129,7 @@ const SendNotice = () => {
                   fullWidth
                   label="Name"
                   variant="outlined"
-                  value={user.displayName || 'N/A'}
+                  value={user.displayName || "N/A"}
                   InputProps={{ readOnly: true }}
                 />
               </Grid>
@@ -144,7 +138,7 @@ const SendNotice = () => {
                   fullWidth
                   label="Designation"
                   variant="outlined"
-                  value={user.email.split('@')[0]} // Extract username from email
+                  value={user.email.split("@")[0]} // Extract username from email
                   InputProps={{ readOnly: true }}
                 />
               </Grid>

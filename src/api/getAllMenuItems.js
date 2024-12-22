@@ -1,14 +1,11 @@
-import axios from "axios"
+import axios from "axios";
 
-export const getAllMenuItems =async ()=>
-{
-    const url="https://us-central1-mess-management-250df.cloudfunctions.net/getAllMenuItems"
-    try{
-        const res=await axios.get(url);
-        return {status:true,data:res}
-
-    }catch(e)
-    {
-        return {status:false,msg:e.message};
-    }
-}
+export const getAllMenuItems = async () => {
+  const api = process.env.REACT_APP_GET_ALL_MENU_ITEMS;
+  try {
+    const res = await axios.get(api);
+    return { status: true, data: res };
+  } catch (e) {
+    return { status: false, msg: e.message };
+  }
+};

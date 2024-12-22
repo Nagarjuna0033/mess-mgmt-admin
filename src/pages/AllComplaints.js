@@ -12,6 +12,8 @@ export default function AllComplaints() {
   const [filteredComplaints, setFilteredComplaints] = useState([]);
   const [category, setCategory] = useState("");
   const [loading, setLoading] = useState(false);
+  const api = process.env.REACT_APP_GET_COMPLAINTS_DATA;
+  const resolveAlApi = process.env.REACT_APP_RESOLVE_ALL_COMPLAINTS;
 
   useEffect(() => {
     getAllComplaints();
@@ -29,14 +31,11 @@ export default function AllComplaints() {
 
   const getAllComplaints = async () => {
     try {
-      const res = await axios.get(
-        "https://us-central1-mess-management-250df.cloudfunctions.net/getcomplaintsData",
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const res = await axios.get(api, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       setComplaints(res.data.complaints.complaints);
       setFilteredComplaints(res.data.complaints.complaints);
     } catch (e) {
@@ -49,7 +48,7 @@ export default function AllComplaints() {
 
     try {
       const res = await axios.get(
-        `https://us-central1-mess-management-250df.cloudfunctions.net/resolveAllComplaints?status=done&category=${category}`
+        `${resolveAlApi}?status=done&category=${category}`
       );
       if (res.status === 200) {
         await getAllComplaints();

@@ -19,7 +19,8 @@ import { sendNotifications } from "../firebaseUtils/sendNotificatoins";
 function MessInchargesTable({ messDetails }) {
   const [details, setDetails] = useState(messDetails);
   const [loading, setLoading] = useState(false);
-
+  const api = process.env.REACT_APP_GET_FCM_TOKENS;
+  const editMessInChargeApi = process.env.REACT_APP_EDIT_MESS_INCHARGE;
   useEffect(() => {
     setDetails(messDetails);
   }, [messDetails]);
@@ -35,14 +36,9 @@ function MessInchargesTable({ messDetails }) {
     try {
       console.log("Updated Details:", details);
 
-      await axios.post(
-        "https://us-central1-mess-management-250df.cloudfunctions.net/editMessIncharge",
-        details
-      );
+      await axios.post(editMessInChargeApi, details);
 
-      const tokens = await axios.get(
-        "https://us-central1-mess-management-250df.cloudfunctions.net/getFcmTokens"
-      );
+      const tokens = await axios.get(api);
       await sendNotifications({
         payload: {
           tokens: tokens.data.tokens,

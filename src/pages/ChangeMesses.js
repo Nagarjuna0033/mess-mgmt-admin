@@ -13,7 +13,11 @@ import {
   Typography,
   CircularProgress,
 } from "@mui/material";
-import { getAllMessses, getInitialMessesAllocation, setMessAllocation } from "../api/getMessInchargeDetails";
+import {
+  getAllMessses,
+  getInitialMessesAllocation,
+  setMessAllocation,
+} from "../api/getMessInchargeDetails";
 import axios from "axios";
 import { sendNotifications } from "../firebaseUtils/sendNotificatoins";
 import { toast } from "react-toastify";
@@ -32,7 +36,6 @@ const ChangeMessesTable = ({ messData, messOptions, onSave }) => {
   const handleSave = () => {
     console.log("Updated Data:", data);
     onSave(data);
-    
   };
 
   const groupedKeys = Object.keys(data).reduce((acc, key, index) => {
@@ -111,7 +114,7 @@ const ChangeMesses = () => {
   const [messData, setMessData] = useState({});
   const [messOptions, setMessOptions] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const api = process.env.REACT_APP_GET_FCM_TOKENS;
   const fetchData = async () => {
     try {
       const messesOptions = await getAllMessses();
@@ -128,12 +131,9 @@ const ChangeMesses = () => {
 
   const handleSave = async (updatedData) => {
     try {
+      await setMessAllocation(updatedData);
 
-      await setMessAllocation(updatedData)
-
-      const tokens = await axios.get(
-        "https://us-central1-mess-management-250df.cloudfunctions.net/getFcmTokens"
-      );
+      const tokens = await axios.get(api);
       await sendNotifications({
         payload: {
           tokens: tokens.data.tokens,
@@ -146,11 +146,9 @@ const ChangeMesses = () => {
         },
       });
       toast.success("Updated Successfully");
-
     } catch (error) {
       toast.error("Something went wrong");
     }
-
   };
 
   useEffect(() => {
@@ -159,7 +157,14 @@ const ChangeMesses = () => {
 
   if (loading) {
     return (
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "80vh",
+        }}
+      >
         <CircularProgress />
       </div>
     );
@@ -168,10 +173,19 @@ const ChangeMesses = () => {
   return (
     <div>
       <ToastContainer />
-      <Typography variant="h5" fontWeight="bold" textAlign="center" sx={{ mt: 3 }}>
+      <Typography
+        variant="h5"
+        fontWeight="bold"
+        textAlign="center"
+        sx={{ mt: 3 }}
+      >
         Change Mess Assignments
       </Typography>
-      <ChangeMessesTable messData={messData} messOptions={messOptions} onSave={handleSave} />
+      <ChangeMessesTable
+        messData={messData}
+        messOptions={messOptions}
+        onSave={handleSave}
+      />
     </div>
   );
 };

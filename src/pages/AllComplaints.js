@@ -17,6 +17,7 @@ export default function AllComplaints() {
 
   useEffect(() => {
     getAllComplaints();
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {

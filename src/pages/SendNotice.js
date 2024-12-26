@@ -50,7 +50,7 @@ const SendNotice = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (user) {
+    if (user && localStorage.getItem("details") === "true") {
       const noticeData = {
         title: e.target.title.value,
         description: e.target.description.value,
@@ -78,6 +78,7 @@ const SendNotice = () => {
         toast.error("Announcement Sent Failed");
       }
     } else {
+      toast.error("please update your profile to send announcements");
       console.log("No user is logged in.");
     }
   };

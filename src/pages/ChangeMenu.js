@@ -66,11 +66,7 @@ export default function Menu() {
       10
     );
 
-    if (
-      !storedValue ||
-      storedValue < fetchedValue ||
-      !localStorage.getItem("menu")
-    ) {
+    if (storedValue < fetchedValue ) {
       await fetchMenuData();
       localStorage.setItem("isMenuUpdated", fetchedValue);
     } else {

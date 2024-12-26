@@ -28,7 +28,7 @@ function MenuCard() {
       const res = await getAllMenuData();
       if (res.status === true) {
         const formattedData = formatMessData(res.data);
-
+        console.log("Revanth",JSON.stringify(formattedData))
         localStorage.setItem("menu", JSON.stringify(formattedData));
         setMenu(formattedData);
 
@@ -63,12 +63,8 @@ function MenuCard() {
       localStorage.getItem("isMenuUpdated") || "0",
       10
     );
-
-    if (
-      !storedValue ||
-      storedValue < fetchedValue ||
-      !localStorage.getItem("menu")
-    ) {
+console.log("Revanth",storedValue)
+    if (storedValue < fetchedValue) {
       await fetchMenuData();
       localStorage.setItem("isMenuUpdated", fetchedValue);
     } else {

@@ -8,5 +8,5 @@ export const getDesignation=(base)=>{
         return "Director"
     }
     else
-    return "Mess Coordinator"
+    return "Admin"
 }

@@ -17,6 +17,15 @@ import { addAnnouncement } from "../api/putAnnouncement";
 import { sendNotifications } from "../firebaseUtils/sendNotificatoins";
 import axios from "axios";
 import { getDesignation } from "../utils/getDesignation";
+import { Timestamp } from "firebase/firestore";
+
+function getFormattedFirebaseTimestamp() {
+  const now = new Date();
+  
+  const firebaseTimestamp = Timestamp.fromDate(now);
+  
+  return firebaseTimestamp;
+}
 
 const theme = createTheme({
   palette: {
@@ -56,9 +65,10 @@ const SendNotice = () => {
         description: e.target.description.value,
         name: user.displayName || "N/A",
         designation: getDesignation(user.email.split("@")[0]),
-        time: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
+        time: getFormattedFirebaseTimestamp(),
         imageURL: user["photoURL"],
       };
+      // console.log("Revanth",noticeData);
       const res = await addAnnouncement(noticeData);
       if (res.success) {
         toast.success("Announcement Sent Successfully");
@@ -138,7 +148,7 @@ const SendNotice = () => {
                   fullWidth
                   label="Designation"
                   variant="outlined"
-                  value={user.email.split("@")[0]} // Extract username from email
+                  value={getDesignation(user.email.split("@")[0])} 
                   InputProps={{ readOnly: true }}
                 />
               </Grid>

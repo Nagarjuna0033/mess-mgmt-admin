@@ -6,7 +6,6 @@ import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
 import GoogleIcon from "@mui/icons-material/Google";
 import logo from "../images/rguktLogo.png";
-import { handleUserLogin } from "../firebaseUtils/login";
 import { toast } from "react-toastify";
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -26,10 +25,10 @@ const Card = styled(MuiCard)(({ theme }) => ({
   }),
 }));
 
-export default function SignInCard() {
-  const handleLogin = async () => {
+export default function SignInCard({ handleLogin }) {
+  const handleUserLogin = async () => {
     try {
-      await handleUserLogin();
+      await handleLogin();
     } catch (error) {
       toast.error("Failed to login");
     }
@@ -56,7 +55,7 @@ export default function SignInCard() {
           <Button
             fullWidth
             variant="contained"
-            onClick={handleLogin}
+            onClick={handleUserLogin}
             startIcon={<GoogleIcon />}
           >
             Sign in with Google

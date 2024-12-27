@@ -3,7 +3,7 @@ import Stack from "@mui/material/Stack";
 import SignInCard from "../components/SignInCard";
 import Content from "../components/Content";
 
-export default function SignIn(props) {
+export default function SignIn({ handleLogin }) {
   return (
     <Stack
       direction="column"
@@ -52,7 +52,7 @@ export default function SignIn(props) {
           }}
         >
           <Content />
-          <SignInCard />
+          <SignInCard handleLogin={handleLogin} />
         </Stack>
       </Stack>
     </Stack>

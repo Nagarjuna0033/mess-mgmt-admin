@@ -1,26 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Box, Typography, Button, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { TextField } from "@mui/material";
 import { getUserInfo } from "../firebaseUtils/getRequests";
 import { auth } from "../firebaseUtils/firebaseConfig";
+import { onAuthStateChanged } from "firebase/auth";
 const Profile = () => {
   const navigate = useNavigate();
 
   const [profile, setProfile] = useState(null);
-  useEffect(() => {
-    getUserDetails();
+
+  React.useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      console.log(user);
+      if (user) {
+        const res = await getUserInfo(user.uid);
+        setProfile(res);
+        console.log("res", res);
+      }
+    });
+
+    return () => unsubscribe();
   }, []);
-
-  const getUserDetails = async () => {
-    if (auth.currentUser) {
-      const res = await getUserInfo(auth.currentUser.uid);
-      setProfile(res);
-    } else {
-      console.log("No user is logged in.");
-    }
-  };
-
   return (
     <Box
       sx={{
@@ -37,7 +38,7 @@ const Profile = () => {
         </Typography>
         <TextField
           label="Email"
-          value={auth.currentUser.email}
+          value={auth && auth?.currentUser?.email}
           slotProps={{
             inputLabel: {
               shrink: true,

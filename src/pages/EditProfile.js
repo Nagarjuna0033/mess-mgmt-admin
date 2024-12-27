@@ -6,13 +6,33 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { auth } from "../firebaseUtils/firebaseConfig";
-import { updateUser } from "../firebaseUtils/createDoc";
+import { createUser, updateUser } from "../firebaseUtils/createDoc";
 import { useNavigate } from "react-router-dom";
+import { getUserInfo } from "../firebaseUtils/getRequests";
+import { onAuthStateChanged } from "firebase/auth";
 const EditProfile = () => {
   const location = useLocation();
   const navigate = useNavigate();
   console.log(location.state);
-  const [profile, setProfile] = useState(location.state || {});
+  const [profile, setProfile] = useState(null);
+  const [user, setUser] = useState(null);
+  console.log("profile", profile);
+
+  React.useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      console.log(user);
+      if (user) {
+        setUser(user);
+        const res = await getUserInfo(user.uid);
+
+        setProfile(res);
+        console.log("res", res);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProfile((prev) => ({ ...prev, [name]: value }));
@@ -20,10 +40,20 @@ const EditProfile = () => {
 
   const handleSave = async () => {
     try {
-      const res = await updateUser(profile);
-      if (res === 200) {
-        navigate("/profile");
+      profile.uid = localStorage.getItem("id");
+      profile.email = user.email;
+      if (localStorage.getItem("details") === "false") {
+        const res = await createUser(profile);
+        if (res === 200) {
+          localStorage.setItem("details", "true");
+        }
+      } else {
+        const res = await updateUser(profile);
+
+        if (res === 200) {
+        }
       }
+      navigate("/profile");
     } catch (error) {
       console.log(error);
     }
@@ -49,7 +79,7 @@ const EditProfile = () => {
           id="outlined"
           name="name"
           variant="standard"
-          value={profile.name}
+          value={profile && profile.name}
           onChange={handleChange}
           fullWidth
         />
@@ -57,14 +87,14 @@ const EditProfile = () => {
           label="Mobile Number"
           name="phoneNumber"
           variant="standard"
-          value={profile.phoneNumber}
+          value={profile && profile.phoneNumber}
           onChange={handleChange}
           fullWidth
         />
 
         <TextField
           label="Email"
-          value={auth.currentUser.email}
+          value={user && user.email}
           variant="standard"
           InputProps={{
             readOnly: true,
@@ -75,7 +105,9 @@ const EditProfile = () => {
           <InputLabel>Gender</InputLabel>
           <Select
             name="gender"
-            defaultValue={profile.gender}
+            defaultValue={
+              profile && profile.gender === "Male" ? "Male" : "Female"
+            }
             onChange={handleChange}
             required
           >

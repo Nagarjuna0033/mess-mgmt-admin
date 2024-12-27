@@ -1,7 +1,6 @@
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { auth } from "../firebaseUtils/firebaseConfig";
 import { isInDb } from "../firebaseUtils/getRequests";
-
 const provider = new GoogleAuthProvider();
 const handleUserLogin = async () => {
   try {
@@ -18,8 +17,8 @@ const handleUserLogin = async () => {
     } else {
       localStorage.setItem("details", "false");
     }
+    localStorage.setItem("id", user.uid);
     window.history.replaceState(null, "", "/");
-    window.location.href = "/";
   } catch (error) {
     console.log("error", error.code, "error msg: ", error.message);
   }

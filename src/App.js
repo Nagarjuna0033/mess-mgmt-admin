@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import ComplaintAnalytics from "./pages/ComplaintAnalytics";
 import OverAllAnalytics from "./pages/OverAllAnalytics";
@@ -17,54 +18,50 @@ import EditProfile from "./pages/EditProfile";
 import ChangeMesses from "./pages/ChangeMesses";
 import Assign from "./pages/Assign";
 import { auth } from "./firebaseUtils/firebaseConfig";
-import DetailsModel from "./components/DetailsModal";
-import { onAuthStateChanged } from "firebase/auth";
+// import DetailsModel from "./components/DetailsModal";
+// import { onAuthStateChanged } from "firebase/auth";
 import { toast, ToastContainer } from "react-toastify";
-import { LoginPrompt } from "./components/LoginPrompt";
 import SendNotice from "./pages/SendNotice";
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { isInDb } from "./firebaseUtils/getRequests";
+const provider = new GoogleAuthProvider();
 
 function App() {
-  const [shouldShowDetailsModel, setShouldShowDetailsModel] = useState(false);
+  // const [shouldShowDetailsModel, setShouldShowDetailsModel] = useState(false);
   const [user, setUser] = useState(false);
-  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        const detailsIncomplete = localStorage.getItem("details") === "false";
-        setShouldShowDetailsModel(detailsIncomplete);
-        toast.success("succsesfully logged in");
+  const handleUserLogin = async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      // eslint-disable-next-line no-unused-vars
+      const token = credential.accessToken;
+      const user = result.user;
+
+      const check = await isInDb(user.uid);
+      setUser(user);
+      toast.success("Successfully logged in");
+      if (check) {
+        localStorage.setItem("details", "true");
       } else {
-        setShouldShowDetailsModel(false);
-        setUser(false);
+        localStorage.setItem("details", "false");
       }
-    });
-
-    return () => {
-      unsubscribe();
-    };
-  }, []);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (user) {
-        setShowLoginPrompt(true);
-      }
-    }, 30000);
-
-    return () => clearInterval(interval);
-  }, [user]);
-
+      localStorage.setItem("id", user.uid);
+      navigate("/");
+    } catch (error) {
+      console.log("error", error.code, "error msg: ", error.message);
+    }
+  };
   return (
     <div>
       <ToastContainer />
-      {shouldShowDetailsModel && (
+      {/* {shouldShowDetailsModel && (
         <DetailsModel
           open={shouldShowDetailsModel}
           onClose={() => setShouldShowDetailsModel(false)}
         />
-      )}
-      {showLoginPrompt && <LoginPrompt />}
+      )} */}
       <Routes>
         <Route path="/" element={<Dashboard />}>
           <Route path="/" element={<Home />} />
@@ -87,9 +84,12 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/edit-profile" element={<EditProfile />} />
           <Route path="/Assign" element={<Assign />} />
-          <Route path="/SendNotice" element={<SendNotice user={user}/>} />
+          <Route path="/SendNotice" element={<SendNotice user={user} />} />
         </Route>
-        <Route path="/Auth/Login" element={<SignIn />} />
+        <Route
+          path="/Auth/Login"
+          element={<SignIn handleLogin={handleUserLogin} />}
+        />
       </Routes>
     </div>
   );
